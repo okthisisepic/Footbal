@@ -8,21 +8,15 @@ public class MW {
     public static Inventory inventory = new Inventory();
     public MW() throws InterruptedException {
         System.out.println("Stealing your ram....");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         System.out.println("Mining bitcoin....");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         System.out.println("stealing your bandwidth....");
         Thread.sleep(500);
         System.out.println("Theft");
         Thread.sleep(500);
         System.out.println("stealing");
         Thread.sleep(500);
-        System.out.println("this is all a joke no sue pls");
-        Thread.sleep(500);
-        for (int i = 0; i < 30; i++) {
-            System.out.println("this is all a joke no sue pls");
-            Thread.sleep(50);
-        }
         run();
 
     }
@@ -33,6 +27,8 @@ public class MW {
         window.setSize(700,700);
         window.setLocationRelativeTo(null);
         Taskbar();
+        contentbroswer();
+        gaming();
 
 
 
@@ -76,7 +72,9 @@ public class MW {
         TASKLEITSE.add(legendarybutton);
         legendarybutton.setToolTipText("Buy a legendary player for 5000000$");
 
-        JLabel Monebar = new JLabel(String.valueOf(Inventory.mone));
+        JLabel Monebar = new JLabel(String.valueOf(Inventory.mone)+"$");
+        Monebar.setToolTipText("Your money");
+        Monebar.setForeground(Color.green);
         TASKLEITSE.add(Monebar);
         window.add(TASKLEITSE, BorderLayout.SOUTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         TASKLEITSE.setBackground(Color.BLUE);
@@ -85,8 +83,61 @@ public class MW {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Inventory.buyrandomcommonplayerpack();
-                Monebar.setText(String.valueOf(Inventory.mone));
+                Monebar.setText(String.valueOf(Inventory.mone+"$"));
             }
         });
+        rarebutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Inventory.buyrandomrareplayerpack();
+                Monebar.setText(String.valueOf(Inventory.mone+"$"));
+            }
+        });
+        legendarybutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Inventory.buyrandomlegendaryplayerpack();
+                Monebar.setText(String.valueOf(Inventory.mone+"$"));
+            }
+        });
+
+
+    }
+    public void contentbroswer() {
+        JPanel Contentbroswer = new JPanel();
+
+        Contentbroswer.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+        JButton createbutton = new JButton("Create your league");
+        JTextField name = new JTextField(10); //10 ist die längedes felds
+        JLabel nameofleague = new JLabel("Inventory.league.name");
+        nameofleague.setForeground(Color.blue);
+        Contentbroswer.add(createbutton);
+        Contentbroswer.add(name);
+        Contentbroswer.add(nameofleague);
+        nameofleague.setVisible(false);
+        createbutton.setFocusable(false);
+        window.add(Contentbroswer, BorderLayout.NORTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
+        Contentbroswer.setBackground(Color.RED);
+        createbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!name.getText().isEmpty() & !name.getText().isBlank()) {
+                    Inventory.createleague(name.getText());
+                    createbutton.setVisible(false);
+                    name.setVisible(false);
+                    nameofleague.setText(Inventory.league.name);
+                    nameofleague.setVisible(true);
+                }
+            }
+        });
+
+    }
+    public void gaming(){
+        JPanel Gamewindow = new JPanel();
+        JLabel nameofleague = new JLabel("G A M I N G");
+        Gamewindow.add(nameofleague);
+        Gamewindow.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+        window.add(Gamewindow, BorderLayout.CENTER); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
+        Gamewindow.setBackground(Color.GREEN);
     }
 }

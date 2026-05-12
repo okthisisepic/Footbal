@@ -6,7 +6,7 @@ public class Inventory {
     public static int mone = 1000000;
     public static String[] preferredPositions = {"Torwart","Innenverteidiger","Außenverteidiger","DefensiverMittelspieler","ZentralMittelfeldSpieler","RechterFlügelSpieler","LinkerFlügelSpieler","OffensiverMittelFeldSpieler"};
     public static List<Spieler> spielerinventory = new ArrayList<>();
-    public static List<Liga> LeaguesOwned = new ArrayList<>();
+    public static Liga league;
     public static String[] players = {"Liam Carter","Noah Müller","Ethan Rossi","Lucas Silva","Oliver Schmidt","James Anderson","Mateo Fernández","Daniel Novak","Adrian Kowalski","Santiago Reyes","Felix Wagner","Marco Bianchi","Hugo Laurent","Ryan Thompson","Kai Nakamura","Zlatan Ibramhimovich ","Sand vich","Nintendo Switch","Goal Messi","Penalty Ronaldo","Harry Kane Jr","John Kickball","FC WiFi","Thomas Milch","Speedy Gonzalez FC","Small toe","Ensar Turkyeeee","Alex","Withalm Rapid","Baller","T80 fuken balling"};
     public static void buyrandomcommonplayerpack() {
         if (mone >= 5000) {
@@ -46,5 +46,9 @@ public class Inventory {
             Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
             spielerinventory.add(p);
         }
+    }
+    public static void createleague(String name) {
+        List<Spieler> empty= new ArrayList<>();
+        league = new Liga(0,name, empty);
     }
 }
