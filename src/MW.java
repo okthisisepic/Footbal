@@ -25,16 +25,25 @@ public class MW {
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setSize(700,700);
         window.setLocationRelativeTo(null);
-        JPanel scenebuilderknockoff = new JPanel();
-        scenebuilderknockoff.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
-        Button generatebutton = new Button("Generate Player");
-        scenebuilderknockoff.add(generatebutton);
-        window.add(scenebuilderknockoff, BorderLayout.CENTER);
-        scenebuilderknockoff.setBackground(Color.BLUE);
+        Taskbar();
+
 
 
     }
     public void show() {
         window.setVisible(true);
+    }
+    public void Taskbar() {
+        JPanel TASKLEITSE = new JPanel();
+        TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT,10,5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
+        JButton generatebutton = new JButton("Generate Player"); //button :3
+        generatebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
+        //ImageIcon generateicon = new ImageIcon("generateiconPlaceHolder.png"); placeholder kannst ändern
+        //generatebutton.setIcon(generateicon);
+        TASKLEITSE.add(generatebutton);
+        //das Placeholder icon ist urr riesig
+        generatebutton.setToolTipText("generate a random Player");
+        window.add(TASKLEITSE, BorderLayout.SOUTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
+        TASKLEITSE.setBackground(Color.BLUE);
     }
 }
