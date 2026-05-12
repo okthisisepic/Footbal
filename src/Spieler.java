@@ -39,7 +39,7 @@ public class Spieler {
     }
     public void gen() {
         try {
-            String apiKey = "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";
+            String apiKey = "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";
 
             URL url = new URL("https://api.groq.com/openai/v1/chat/completions");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
