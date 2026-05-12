@@ -10,6 +10,21 @@ public class Spieler {
     public enum PrefferredPosition {
         Torwart,Innerverteidiger,Außenverteidiger,DefensiverMittelspieler,ZentralMittelfeldSpieler,RechterFlügelSpieler,LinkerFlügelSpieler,OffensiverMittelFeldSpieler;
     }
+    public int range;
+    public int accuracy;
+    public int runningspeed;
+
+    public Spieler(String name, int price, int range, int accuracy, int runningspeed, PrefferredPosition position) {
+        this.name = name;
+        this.price = price;
+        this.range = range;
+        this.accuracy = accuracy;
+        this.runningspeed = runningspeed;
+        Position = position;
+    }
+
+
+
 
     public PrefferredPosition getPosition() {
         return Position;
@@ -34,14 +49,9 @@ public class Spieler {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-    public static void gen() {
-        
+    public static void setPrice(int price) {
+        price = price;
     }
 
-    public static void main(String[] args) {
-        gen();
-    }
+
 }

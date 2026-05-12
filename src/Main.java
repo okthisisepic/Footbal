@@ -10,7 +10,7 @@ public class Main {
                     MW mw = new MW();
                     mw.show();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("Stuff went down");
                 }
             }
         });
