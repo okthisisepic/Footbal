@@ -26,12 +26,13 @@ public class MW {
         window.setSize(700,700);
         window.setLocationRelativeTo(null);
         JPanel scenebuilderknockoff = new JPanel();
-        scenebuilderknockoff.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
+        scenebuilderknockoff.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
+        Button generatebutton = new Button("Generate Player");
+        scenebuilderknockoff.add(generatebutton);
         window.add(scenebuilderknockoff, BorderLayout.CENTER);
         scenebuilderknockoff.setBackground(Color.BLUE);
 
-        Button generatebutton = new Button("Generate Player");
-        window.add(generatebutton);
+
     }
     public void show() {
         window.setVisible(true);
