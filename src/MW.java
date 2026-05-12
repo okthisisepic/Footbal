@@ -21,7 +21,7 @@ public class MW {
         Thread.sleep(500);
         for (int i = 0; i < 30; i++) {
             System.out.println("this is all a joke no sue pls");
-            Thread.sleep(100);
+            Thread.sleep(50);
         }
         run();
 
@@ -47,7 +47,7 @@ public class MW {
 
 
         TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT,10,5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
-        JButton generatebutton = new JButton("Generate Player"); //button :3
+        JButton generatebutton = new JButton("commonplayer 5000$"); //button :3
         generatebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
 
 
@@ -56,9 +56,28 @@ public class MW {
         //das Placeholder icon ist urr riesig nicht empfehlenswert
 
         TASKLEITSE.add(generatebutton);
-        generatebutton.setToolTipText("generate a random Player");
+        generatebutton.setToolTipText("Buy a common player for 5000$");
+        JButton rarebutton = new JButton("rare player 500000$"); //button :3
+        rarebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
+
+        TASKLEITSE.add(generatebutton);
+        generatebutton.setToolTipText("Buy a common player for 5000$");
+
+        TASKLEITSE.add(rarebutton);
+        rarebutton.setToolTipText("Buy a rare player for 500000$");
 
 
+
+        JButton legendarybutton = new JButton("legendary player 5000000$"); //button :3
+        legendarybutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
+
+
+
+        TASKLEITSE.add(legendarybutton);
+        legendarybutton.setToolTipText("Buy a legendary player for 5000000$");
+
+        JLabel Monebar = new JLabel(String.valueOf(Inventory.mone));
+        TASKLEITSE.add(Monebar);
         window.add(TASKLEITSE, BorderLayout.SOUTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         TASKLEITSE.setBackground(Color.BLUE);
 
@@ -66,6 +85,7 @@ public class MW {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Inventory.buyrandomcommonplayerpack();
+                Monebar.setText(String.valueOf(Inventory.mone));
             }
         });
     }
