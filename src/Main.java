@@ -6,8 +6,12 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MW mw = new MW();
-                mw.show();
+                try {
+                    MW mw = new MW();
+                    mw.show();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
