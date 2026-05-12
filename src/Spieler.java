@@ -37,9 +37,10 @@ public class Spieler {
     public void setPrice(int price) {
         this.price = price;
     }
-    public void gen() {
+    public static void gen() {
         try {
             String apiKey = "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";
+
 
             URL url = new URL("https://api.groq.com/openai/v1/chat/completions");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -49,30 +50,39 @@ public class Spieler {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
+            String question = "Random Footballer not Cristiano Ronaldo output just the name thank you";
 
-            String question = "Random Footballername OUTPUT JUST THE NAME NOTHING ELSE";
-
-            String json =
-                    "{"
-                            + "\"model\":\"llama-3.3-70b-versatile\","
-                            + "\"messages\":["
-                            + "{\"role\":\"user\",\"content\":\"" + question + "\"}"
-                            + "]"
-                            + "}";
+            String body = """
+            {
+              "model": "llama-3.3-70b-versatile",
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "%s"
+                }
+              ]
+            }
+            """.formatted(question);
 
             OutputStream os = conn.getOutputStream();
-            os.write(json.getBytes());
-            os.flush();
+            os.write(body.getBytes());
             os.close();
 
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream())
             );
 
-            String output;
+            String line;
 
-            while ((output = br.readLine()) != null) {
-                System.out.println(output);
+            while ((line = br.readLine()) != null) {
+
+                if (line.contains("\"content\":\"")) {
+
+                    String result = line.split("\"content\":\"")[1]
+                            .split("\"")[0];
+
+                    System.out.println(result);
+                }
             }
 
             br.close();
@@ -80,5 +90,10 @@ public class Spieler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public static void main(String[] args) {
+        gen();
     }
 }
