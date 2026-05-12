@@ -26,9 +26,7 @@ public class MW {
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setSize(700,700);
         window.setLocationRelativeTo(null);
-        Taskbar();
         contentbroswer();
-        gaming();
 
 
 
@@ -127,6 +125,8 @@ public class MW {
                     name.setVisible(false);
                     nameofleague.setText(Inventory.league.name);
                     nameofleague.setVisible(true);
+                    Taskbar();
+                    gaming();
                 }
             }
         });
