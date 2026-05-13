@@ -1,16 +1,26 @@
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory {
-    public static int mone = 1000000;
-    public static String[] preferredPositions = {"Torwart","Innenverteidiger","Außenverteidiger","DefensiverMittelspieler","ZentralMittelfeldSpieler","RechterFlügelSpieler","LinkerFlügelSpieler","OffensiverMittelFeldSpieler"};
-    public static List<Spieler> spielerinventory = new ArrayList<>();
-    public static Liga league;
+public class Teamclass {
+    public  List<Spieler> spielerinventory = new ArrayList<>();
+    public int size;
     public static String[] players = {"Liam Carter","Noah Müller","Ethan Rossi","Lucas Silva","Oliver Schmidt","James Anderson","Mateo Fernández","Daniel Novak","Adrian Kowalski","Santiago Reyes","Felix Wagner","Marco Bianchi","Hugo Laurent","Ryan Thompson","Kai Nakamura","Zlatan Ibramhimovich ","Sand vich","Nintendo Switch","Goal Messi","Penalty Ronaldo","Harry Kane Jr","John Kickball","FC WiFi","Thomas Milch","Speedy Gonzalez FC","Small toe","Ensar Turkyeeee","Alex","Withalm Rapid","Baller","T80 fuken balling"};
-    public static void buyrandomcommonplayerpack() {
-        if (mone >= 5000) {
-            mone -= 5000;
+    public static String[] preferredPositions = {"Torwart","Innenverteidiger","Außenverteidiger","DefensiverMittelspieler","ZentralMittelfeldSpieler","RechterFlügelSpieler","LinkerFlügelSpieler","OffensiverMittelFeldSpieler"};
+    public String name;
+
+    public Teamclass(List<Spieler> spielerinventory, int size, String name) {
+        this.spielerinventory = spielerinventory;
+        this.size = size;
+        this.name = name;
+        for (int i = 0; i < size/3; i++) {
+            buyrandomcommonplayerpack(spielerinventory);
+            buyrandomrareplayerpack(spielerinventory);
+            buyrandomlegendaryplayerpack(spielerinventory);
+        }
+        System.out.println(name);
+    }
+
+    public static void buyrandomcommonplayerpack(List<Spieler> spielerinventory) {
             String randomname = players[(int) (Math.random() * players.length - 1)];
             int price = (int) (Math.random() * 10000) + 7;
             int range = (int) (Math.random() * 20) + 14;
@@ -19,11 +29,11 @@ public class Inventory {
             String Position = preferredPositions[(int) (Math.random() * 7)];
             Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
             spielerinventory.add(p);
-        }
+
     }
-    public static void buyrandomrareplayerpack() {
-        if (mone >= 500000) {
-            mone -= 500000;
+    public static void buyrandomrareplayerpack(List<Spieler> spielerinventory) {
+
+
             String randomname = players[(int) (Math.random() * players.length - 1)];
             int price = (int) (Math.random() * 1000000) + 7;
             int range = (int) (Math.random() * 35) + 20;
@@ -32,11 +42,9 @@ public class Inventory {
             String Position = preferredPositions[(int) (Math.random() * 7)];
             Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
             spielerinventory.add(p);
-        }
+
     }
-    public static void buyrandomlegendaryplayerpack() {
-        if (mone >= 5000000) {
-            mone -= 5000000;
+    public static void buyrandomlegendaryplayerpack(List<Spieler> spielerinventory) {
             String randomname = players[(int) (Math.random() * players.length - 1)];
             int price = (int) (Math.random() * 10000000) + 7;
             int range = (int) (Math.random() * 55) + 40;
@@ -45,10 +53,22 @@ public class Inventory {
             String Position = preferredPositions[(int) (Math.random() * 7)];
             Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
             spielerinventory.add(p);
-        }
     }
-    public static void createleague(String name ,int amount) {
-        List<Teamclass> empty= new ArrayList<>();
-        league = new Liga(empty,name, 0,amount);
+
+    public static String[] getPreferredPositions() {
+        return preferredPositions;
     }
+
+    public static void setPreferredPositions(String[] preferredPositions) {
+        Teamclass.preferredPositions = preferredPositions;
+    }
+
+    public static String[] getPlayers() {
+        return players;
+    }
+
+    public static void setPlayers(String[] players) {
+        Teamclass.players = players;
+    }
+
 }

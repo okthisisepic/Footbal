@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class MW {
     private JFrame window;
     public static Inventory inventory = new Inventory();
+
     public MW() throws InterruptedException {
         System.out.println("Stealing your ram....");
         Thread.sleep(500);
@@ -20,27 +21,29 @@ public class MW {
         run();
 
     }
+
     public void run() {
         window = new JFrame();
         window.setTitle("Fobal simulator");
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setSize(700,700);
+        window.setSize(700, 700);
         window.setLocationRelativeTo(null);
         contentbroswer();
 
 
-
     }
+
     public void show() {
         window.setVisible(true);
     }
+
     public void Taskbar() {
 
 
         JPanel TASKLEITSE = new JPanel();
 
 
-        TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT,10,5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
+        TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
         JButton generatebutton = new JButton("commonplayer 5000$"); //button :3
         generatebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
 
@@ -61,16 +64,14 @@ public class MW {
         rarebutton.setToolTipText("Buy a rare player for 500000$");
 
 
-
         JButton legendarybutton = new JButton("legendary player 5000000$"); //button :3
         legendarybutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
-
 
 
         TASKLEITSE.add(legendarybutton);
         legendarybutton.setToolTipText("Buy a legendary player for 5000000$");
 
-        JLabel Monebar = new JLabel(String.valueOf(Inventory.mone)+"$");
+        JLabel Monebar = new JLabel(String.valueOf(Inventory.mone) + "$");
         Monebar.setToolTipText("Your money");
         Monebar.setForeground(Color.green);
         TASKLEITSE.add(Monebar);
@@ -81,21 +82,21 @@ public class MW {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Inventory.buyrandomcommonplayerpack();
-                Monebar.setText(String.valueOf(Inventory.mone+"$"));
+                Monebar.setText(String.valueOf(Inventory.mone + "$"));
             }
         });
         rarebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Inventory.buyrandomrareplayerpack();
-                Monebar.setText(String.valueOf(Inventory.mone+"$"));
+                Monebar.setText(String.valueOf(Inventory.mone + "$"));
             }
         });
         legendarybutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Inventory.buyrandomlegendaryplayerpack();
-                Monebar.setText(String.valueOf(Inventory.mone+"$"));
+                Monebar.setText(String.valueOf(Inventory.mone + "$"));
             }
         });
         JButton inventorybutton = new JButton("Inventory");
@@ -104,17 +105,18 @@ public class MW {
         inventorybutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                inventorywindow();
             }
         });
 
 
     }
+
     public void contentbroswer() {
         JPanel Contentbroswer = new JPanel();
 
-        Contentbroswer.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
-        JButton createbutton = new JButton("Create your league");
+        Contentbroswer.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        JButton createbutton = new JButton("Create your league:name and amount of teams");
         JTextField name = new JTextField(10); //10 ist die längedes felds
         JLabel nameofleague = new JLabel("Inventory.league.name");
         nameofleague.setForeground(Color.blue);
@@ -123,17 +125,20 @@ public class MW {
         Contentbroswer.add(nameofleague);
         nameofleague.setVisible(false);
         createbutton.setFocusable(false);
+        JTextField amount = new JTextField(10);
+        Contentbroswer.add(amount);
         window.add(Contentbroswer, BorderLayout.NORTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         Contentbroswer.setBackground(Color.RED);
         createbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!name.getText().isEmpty() & !name.getText().isBlank()) {
-                    Inventory.createleague(name.getText());
+                    Inventory.createleague(name.getText(), Integer.parseInt(amount.getText()));
                     createbutton.setVisible(false);
                     name.setVisible(false);
                     nameofleague.setText(Inventory.league.name);
                     nameofleague.setVisible(true);
+                    amount.setVisible(false);
                     Taskbar();
                     gaming();
                 }
@@ -141,17 +146,30 @@ public class MW {
         });
 
     }
-    public void gaming(){
+
+    public void gaming() {
         JPanel Gamewindow = new JPanel();
-        JLabel nameofleague = new JLabel("G A M I N G");
-        Gamewindow.add(nameofleague);
-        Gamewindow.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+        JLabel gaming = new JLabel("G A M I N G");
+        Gamewindow.add(gaming);
+        Gamewindow.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
         window.add(Gamewindow, BorderLayout.CENTER); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         Gamewindow.setBackground(Color.GREEN);
     }
+
     public void inventorywindow() {
         JFrame invenwindow = new JFrame();
-        invenwindow.setSize(700,700);
+        invenwindow.setSize(700, 700);
         invenwindow.setTitle("Inventory");
+        invenwindow.show();
+        JPanel Teamlist = new JPanel();
+        Teamlist.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+
+
+        for (int i = 0; i < Inventory.league.Teams.size(); i++) {
+
+            Teamlist.add(new JButton(Inventory.league.Teams.get(i).name));
+        }
+        invenwindow.add(Teamlist,BorderLayout.WEST);
+        Teamlist.setBackground(Color.green);
     }
 }
