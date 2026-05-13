@@ -1,5 +1,10 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+
 public class Team {
         String name;
+        List<Spieler> players = new ArrayList<>();
         int games;
         int wins;
         int draws;
@@ -21,6 +26,7 @@ public class Team {
 
         public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo){
             this.name = name;
+            this.players = generatePlayers();
             this.games = games;
             this.wins = wins;
             this.draws = draws;

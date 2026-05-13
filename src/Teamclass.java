@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class Teamclass {
     public  List<Spieler> spielerinventory = new ArrayList<>();
     public int size;
@@ -72,3 +72,5 @@ public class Teamclass {
     }
 
 }
+
+ */

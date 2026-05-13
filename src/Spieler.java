@@ -1,77 +1,39 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+enum POSITION{ATT, MID, DEF, GK}
 
 public class Spieler {
-    public String name;
-    public int price;
+    private String name;
+    private double price;
+    private double rating;
+    private POSITION position;
 
-    public int range;
-    public int accuracy;
-    public int runningspeed;
-    public String Position;
-
-    public Spieler(String name, int price, int range, int accuracy, int runningspeed, String position) {
+    public Spieler() {
         this.name = name;
         this.price = price;
-        this.range = range;
-        this.accuracy = accuracy;
-        this.runningspeed = runningspeed;
-        Position = position;
-        teststats();
+        this.rating = rating;
+        this.position = position;
+    }
+
+    public static void generatePlayer() {
+
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public static void setPrice(int price) {
-        price = price;
+    public double getRating() {
+        return rating;
     }
 
-
-    public int getRange() {
-        return range;
+    public POSITION getPosition() {
+        return position;
     }
 
-    public void setRange(int range) {
-        this.range = range;
-    }
-
-    public int getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    public int getRunningspeed() {
-        return runningspeed;
-    }
-
-    public void setRunningspeed(int runningspeed) {
-        this.runningspeed = runningspeed;
-    }
-
-    public String getPosition() {
-        return Position;
-    }
-
-    public void setPosition(String position) {
-        Position = position;
-    }
     public void teststats() {
-        System.out.println("Name: "+name+" price: "+price+"$ range: "+range+" meters accuracy: "+accuracy+"% runningspeed: "+runningspeed+"/10 position: "+Position);
+        System.out.println("Name: "+getName()+" price: "+getPrice()+"$ rating: "+getRating()+" position: "+getPosition());
     }
 }

@@ -17,7 +17,7 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 40) + 1;
             int runningspeed = (int) (Math.random() * 3) + 1;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
+            Spieler p = new Spieler();
             spielerinventory.add(p);
         }
     }
@@ -30,7 +30,7 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 70) + 40;
             int runningspeed = (int) (Math.random() * 6) + 3;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
+            Spieler p = new Spieler();
             spielerinventory.add(p);
         }
     }
@@ -43,7 +43,7 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 100) + 60;
             int runningspeed = (int) (Math.random() * 10) + 8;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler(randomname, price, range, accuracy, runningspeed, Position);
+            Spieler p = new Spieler();
             spielerinventory.add(p);
         }
     }
