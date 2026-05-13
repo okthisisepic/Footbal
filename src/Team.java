@@ -5,6 +5,7 @@ import java.util.TreeSet;
 public class Team {
         String name;
         List<Spieler> players = new ArrayList<>();
+        double budget;
         int games;
         int wins;
         int draws;
@@ -26,7 +27,7 @@ public class Team {
 
         public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo){
             this.name = name;
-            this.players = generatePlayers();
+            this.players = generatePlayerList();
             this.games = games;
             this.wins = wins;
             this.draws = draws;
@@ -37,6 +38,14 @@ public class Team {
             this.points = points;
             this.championships = championships;
             this.elo = elo;
+        }
+
+        public List<Spieler> generatePlayerList(){
+            List<Spieler> players = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                players.add(new Spieler());
+            }
+            return players;
         }
 
         public static void playGame(Team a, Team b, int toreA, int toreB){
