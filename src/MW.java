@@ -98,6 +98,15 @@ public class MW {
                 Monebar.setText(String.valueOf(Inventory.mone+"$"));
             }
         });
+        JButton inventorybutton = new JButton("Inventory");
+        TASKLEITSE.add(inventorybutton);
+        inventorybutton.setFocusable(false);
+        inventorybutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
 
     }
@@ -139,5 +148,10 @@ public class MW {
         Gamewindow.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
         window.add(Gamewindow, BorderLayout.CENTER); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         Gamewindow.setBackground(Color.GREEN);
+    }
+    public void inventorywindow() {
+        JFrame invenwindow = new JFrame();
+        invenwindow.setSize(700,700);
+        invenwindow.setTitle("Inventory");
     }
 }
