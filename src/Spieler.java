@@ -40,6 +40,7 @@ public class Spieler {
         } catch (Exception e){
             System.out.println("Fehler beim Spieler generieren!");
         }
+        teststats();
     }
 
     public String getName() {
