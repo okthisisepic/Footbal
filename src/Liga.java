@@ -14,15 +14,15 @@ public class Liga {
         this.amountofteams = amountofteams;
     }
 
-/*
+
     public void makesumteasm() {
         List<Spieler> empty= new ArrayList<>();
         for (int i = 0; i < amountofteams; i++) {
-            Teams.add(new Team(empty,9,name+" Team"+(i+1)));
+            Teams.add(new Team(name));
         }
 
     }
 
- */
+
 
 }
