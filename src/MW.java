@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Flow;
+
 // in this class not only is the ui stored here but also the inventory for direct access to the ui
 public class MW {
     private JFrame window;
@@ -188,15 +190,25 @@ public class MW {
         invenwindow.setTitle("Inventory");
         invenwindow.setVisible(true);
 
+
         JPanel Teamlist = new JPanel();
         Teamlist.setLayout(new BoxLayout(Teamlist, BoxLayout.Y_AXIS));
 
+
         for (int i = 0; i < Inventory.league.getTeams().size(); i++) {
             Teamlist.add(new JButton(Inventory.league.getTeams().get(i).name));
+
+            for (int j = 0; j < Inventory.league.getTeams().get(i).players.size(); j++) {
+                Teamlist.add(new JPanel().add(new JLabel(Inventory.league.getTeams().get(i).players.get(j).getName())));
+            }
+
+
         }
+        JScrollPane Scrollbox = new JScrollPane(Teamlist);
+        invenwindow.add(Scrollbox);
 
         Teamlist.setBackground(Color.green);
 
-        invenwindow.add(Teamlist, BorderLayout.WEST);
+
     }
 }
