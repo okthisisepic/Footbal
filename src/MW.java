@@ -136,7 +136,7 @@ public class MW {
                     Inventory.createleague(name.getText(), Integer.parseInt(amount.getText()));
                     createbutton.setVisible(false);
                     name.setVisible(false);
-                    nameofleague.setText(Inventory.league.name);
+                    nameofleague.setText(Inventory.league.getName());
                     nameofleague.setVisible(true);
                     amount.setVisible(false);
                     Taskbar();
@@ -165,9 +165,9 @@ public class MW {
         Teamlist.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
 
 
-        for (int i = 0; i < Inventory.league.Teams.size(); i++) {
+        for (int i = 0; i < Inventory.league.getTeams().size(); i++) {
 
-            Teamlist.add(new JButton(Inventory.league.Teams.get(i).name));
+            Teamlist.add(new JButton(Inventory.league.getTeams().get(i).name));
         }
         invenwindow.add(Teamlist,BorderLayout.WEST);
         Teamlist.setBackground(Color.green);
