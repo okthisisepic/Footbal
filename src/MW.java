@@ -59,7 +59,6 @@ public class MW {
 
         JPanel TASKLEITSE = new JPanel();
 
-
         TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
         JButton generatebutton = new JButton("commonplayer 5000$"); //button :3
         generatebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
