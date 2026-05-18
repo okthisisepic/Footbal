@@ -5,7 +5,7 @@ import java.util.List;
 enum POSITION{ATT, MID, DEF, GK}
 
 public class Spieler {
-    private String name;
+    private String name = "";
     private double price;
     private double rating;
     private POSITION position;
@@ -23,19 +23,20 @@ public class Spieler {
             name += " "+names[(int) (Math.random()* names.length)];
             price = Math.nextUp(Math.random()*100000);
             int decidePosition = (int) (Math.random()*11);
-            int rating = (int) (Math.random() * 55) + 45;
-            if (decidePosition > 3){
-                position = POSITION.ATT;
-            }
-            if (decidePosition > 6){
-                position = POSITION.MID;
-            }
-            if (decidePosition > 9){
-                position = POSITION.DEF;
-            }
+            rating = (int) (Math.random() * 65) + 35;
             if (decidePosition == 10){
                 position = POSITION.GK;
             }
+            if (decidePosition < 9){
+                position = POSITION.DEF;
+            }
+            if (decidePosition < 6){
+                position = POSITION.MID;
+            }
+            if (decidePosition < 3){
+                position = POSITION.ATT;
+            }
+            teststats();
         } catch (Exception e){
             System.out.println("Fehler beim Spieler generieren!");
         }

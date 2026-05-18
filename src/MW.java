@@ -23,7 +23,26 @@ public class MW {
         run();
 
     }
+/*
+    public void start(){
+        JFrame startWindow = new JFrame();
+        JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
+        JLabel startLabel = new JLabel("Fantasy Football Simulator");
+        JButton createLeagues = new JButton("Create Leagues");
+        JButton viewLeagues = new JButton("View Leagues");
+        startWindow.setVisible(true);
+        startWindow.setTitle("Fobal simulator");
+        startWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        startWindow.setSize(700, 700);
+        startWindow.setLocationRelativeTo(null);
+        startPanel.add(startLabel);
+        startPanel.add(createLeagues);
+        startPanel.add(viewLeagues);
+        startWindow.add(startPanel);
+        run();
+    }
 
+ */
     public void run() {
         window = new JFrame();
         window.setTitle("Fobal simulator");
@@ -31,8 +50,6 @@ public class MW {
         window.setSize(700, 700);
         window.setLocationRelativeTo(null);
         contentbroswer();
-
-
     }
 
     public void show() {
@@ -43,7 +60,6 @@ public class MW {
 
 
         JPanel TASKLEITSE = new JPanel();
-
 
         TASKLEITSE.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // hier kannst sagen wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
         JButton generatebutton = new JButton("commonplayer 5000$"); //button :3
