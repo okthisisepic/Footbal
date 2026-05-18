@@ -24,7 +24,8 @@ public class MW {
 /*
     public void start(){
         JFrame startWindow = new JFrame();
-        JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
+        JPanel startPanel = new JPanel();
+        startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
         JLabel startLabel = new JLabel("Fantasy Football Simulator");
         JButton createLeagues = new JButton("Create Leagues");
         JButton viewLeagues = new JButton("View Leagues");
@@ -37,7 +38,12 @@ public class MW {
         startPanel.add(createLeagues);
         startPanel.add(viewLeagues);
         startWindow.add(startPanel);
-        run();
+        createLeagues.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                run();
+            }
+        });
     }
 
  */
