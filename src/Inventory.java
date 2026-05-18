@@ -49,6 +49,6 @@ public class Inventory {
     }
     public static void createleague(String name ,int amount) {
         List<Team> empty= new ArrayList<>();
-        league = new League(name,0);
+        league = new League(name,0,amount);
     }
 }

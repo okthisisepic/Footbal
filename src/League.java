@@ -1,24 +1,40 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class League {
     private String name;
     private int tier;
     private int promotion;
     private int relegation;
+    private int amount;
     private ArrayList<Team> teams;
     private ArrayList<Team> champions;
 
     public League(String name, int tier) {
-        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>());
+        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>(),0);
     }
 
-    public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions) {
+    public League(String name, int tier, int amount) {
+        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>(),amount);
+    }
+
+    public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions, int amount) {
         this.name = name;
         this.tier = tier;
         this.promotion = promotion;
         this.relegation = relegation;
         this.teams = teams;
         this.champions = champions;
+        this.amount = amount;
+        makesumteasm();
+    }
+
+    public void makesumteasm() {
+        List<Spieler> empty= new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            teams.add(new Team(name+" Team"));
+        }
+
     }
 
     public String getName() {
@@ -59,6 +75,10 @@ public class League {
 
     public ArrayList<Team> getChampions() {
         return champions;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     public void showTable() {

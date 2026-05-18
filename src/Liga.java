@@ -14,7 +14,7 @@ public class Liga {
         this.amountofteams = amountofteams;
     }
 
-/*
+    /*
     public void makesumteasm() {
         List<Spieler> empty= new ArrayList<>();
         for (int i = 0; i < amountofteams; i++) {
@@ -23,6 +23,5 @@ public class Liga {
 
     }
 
- */
-
+     */
 }
