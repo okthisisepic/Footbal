@@ -16,7 +16,7 @@ public class Spieler {
 
     public void generatePlayer() {
         try {
-            List<String> line = Files.readAllLines(Path.of("src/namensliste.txt"));
+            List<String> line = Files.readAllLines(Path.of("src/namenliste.txt"));
             String[] names = line.getFirst().split(",");
             //Name generieren
             name += names[(int) (Math.random()* names.length)];
@@ -39,6 +39,7 @@ public class Spieler {
         } catch (Exception e){
             System.out.println("Fehler beim Spieler generieren!");
         }
+        teststats();
     }
 
     public String getName() {

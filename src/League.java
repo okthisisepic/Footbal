@@ -32,7 +32,7 @@ public class League {
     public void makesumteasm() {
         List<Spieler> empty= new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            teams.add(new Team(name+" Team"));
+            teams.add(new Team(name+" Team "+(i+1)));
         }
 
     }

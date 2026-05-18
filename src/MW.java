@@ -132,15 +132,19 @@ public class MW {
         createbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!name.getText().isEmpty() & !name.getText().isBlank()) {
-                    Inventory.createleague(name.getText(), Integer.parseInt(amount.getText()));
-                    createbutton.setVisible(false);
-                    name.setVisible(false);
-                    nameofleague.setText(Inventory.league.getName());
-                    nameofleague.setVisible(true);
-                    amount.setVisible(false);
-                    Taskbar();
-                    gaming();
+                if (!name.getText().isEmpty() & !name.getText().isBlank() & !amount.getText().isEmpty() & !amount.getText().isBlank()) {
+                    if (Integer.parseInt(amount.getText()) >10) {
+                        System.out.println("no we are not doing ts thats way to many teams");
+                    } else {
+                        Inventory.createleague(name.getText(), Integer.parseInt(amount.getText()));
+                        createbutton.setVisible(false);
+                        name.setVisible(false);
+                        nameofleague.setText(Inventory.league.getName());
+                        nameofleague.setVisible(true);
+                        amount.setVisible(false);
+                        Taskbar();
+                        gaming();
+                    }
                 }
             }
         });
@@ -160,16 +164,17 @@ public class MW {
         JFrame invenwindow = new JFrame();
         invenwindow.setSize(700, 700);
         invenwindow.setTitle("Inventory");
-        invenwindow.show();
-        JPanel Teamlist = new JPanel();
-        Teamlist.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+        invenwindow.setVisible(true);
 
+        JPanel Teamlist = new JPanel();
+        Teamlist.setLayout(new BoxLayout(Teamlist, BoxLayout.Y_AXIS));
 
         for (int i = 0; i < Inventory.league.getTeams().size(); i++) {
-
             Teamlist.add(new JButton(Inventory.league.getTeams().get(i).name));
         }
-        invenwindow.add(Teamlist,BorderLayout.WEST);
+
         Teamlist.setBackground(Color.green);
+
+        invenwindow.add(Teamlist, BorderLayout.WEST);
     }
 }
