@@ -12,17 +12,17 @@ public class Liga {
         this.name = name;
         this.networth = networth;
         this.amountofteams = amountofteams;
+        makesumteasm();
     }
 
-/*
     public void makesumteasm() {
         List<Spieler> empty= new ArrayList<>();
         for (int i = 0; i < amountofteams; i++) {
-            Teams.add(new Team(empty,9,name+" Team"+(i+1)));
+            Teams.add(new Team(" Team"+(i+1)));
         }
 
     }
 
- */
+
 
 }
