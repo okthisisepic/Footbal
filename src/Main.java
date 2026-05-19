@@ -8,7 +8,6 @@ public class Main {
             public void run() {
                 try {
                     MW mw = new MW();
-                    mw.show();
                 } catch (InterruptedException e) {
                     System.out.println("Stuff went down");
                 }

@@ -20,26 +20,46 @@ public class MW {
         Thread.sleep(500);
         System.out.println("stealing");
         Thread.sleep(500);
-        run();
+        start();
 
     }
-/*
-    public void start(){
-        JFrame startWindow = new JFrame();
-        JPanel startPanel = new JPanel();
-        startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
+    public void start() {
+
+        JFrame startWindow = new JFrame("Fobal simulator");
+
+        // Zentriert Inhalte horizontal + vertikal
+        JPanel startPanel = new JPanel(new GridBagLayout());
+
+        // Container für die Elemente untereinander
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+
         JLabel startLabel = new JLabel("Fantasy Football Simulator");
         JButton createLeagues = new JButton("Create Leagues");
         JButton viewLeagues = new JButton("View Leagues");
-        startWindow.setVisible(true);
-        startWindow.setTitle("Fobal simulator");
+
+        // Horizontal mittig
+        startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+        viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Elemente hinzufügen
+        content.add(startLabel);
+        content.add(Box.createVerticalStrut(20));
+        content.add(createLeagues);
+        content.add(Box.createVerticalStrut(10));
+        content.add(viewLeagues);
+
+        // Content in die Mitte setzen
+        startPanel.add(content);
+
+        startWindow.add(startPanel);
+
         startWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         startWindow.setSize(700, 700);
         startWindow.setLocationRelativeTo(null);
-        startPanel.add(startLabel);
-        startPanel.add(createLeagues);
-        startPanel.add(viewLeagues);
-        startWindow.add(startPanel);
+        startWindow.setVisible(true);
+
         createLeagues.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,18 +68,14 @@ public class MW {
         });
     }
 
- */
     public void run() {
         window = new JFrame();
         window.setTitle("Fobal simulator");
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setSize(700, 700);
         window.setLocationRelativeTo(null);
-        contentbroswer();
-    }
-
-    public void show() {
         window.setVisible(true);
+        contentbroswer();
     }
 
     public void Taskbar() {
