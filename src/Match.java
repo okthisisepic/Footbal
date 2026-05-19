@@ -13,73 +13,102 @@ public class Match {
         prepareMatch();
     }
 
-    public static void playGame(Team a, Team b, int toreA, int toreB){
-        System.out.println();
-        System.out.println(a.name+" "+toreA+" - "+toreB+" "+b.name);
-        a.games++;
-        b.games++;
-        a.goals += toreA;
-        a.goalsAgainst += toreB;
-        b.goals += toreB;
-        b.goalsAgainst += toreA;
-        a.goalsTotal = a.goals - a.goalsAgainst;
-        b.goalsTotal = b.goals - b.goalsAgainst;
-        if(toreA > toreB){
-            a.wins++;
-            b.losses++;
-            a.points += 3;
-        }
-        else if(toreA < toreB){
-            b.wins++;
-            a.losses++;
-            b.points += 3;
-        }
-        else {
-            a.points++;
-            a.draws++;
-            b.points++;
-            b.draws++;
-        }
-        updateElo(a,b,toreA,toreB);
-    }
-
-    private void prepareMatch(){
+    private void prepareMatch() {
         Set<Spieler> sortTeam1 = new TreeSet<>(new Comparator<Spieler>() {
             @Override
             public int compare(Spieler o1, Spieler o2) {
-                return Double.compare(o1.getRating(),o2.getRating());
+                return Double.compare(o1.getRating(), o2.getRating());
             }
         });
         Set<Spieler> sortTeam2 = new TreeSet<>(new Comparator<Spieler>() {
             @Override
             public int compare(Spieler o1, Spieler o2) {
-                return Double.compare(o1.getRating(),o2.getRating());
+                return Double.compare(o1.getRating(), o2.getRating());
             }
         });
         sortTeam1.addAll(team1.getPlayers());
         sortTeam2.addAll(team2.getPlayers());
-        int count = 1;
-        double getStrengthTeam1 = 0;
-        for (Spieler p : sortTeam1){
-            if ((count >= 1 && count <= 4) && p.getPosition().equals(POSITION.ATT)){
 
+        double teamStrength1 = team1.getElo() + (getStartingStrength(sortTeam1) * 15 * 0.25);
+        double teamStrength2 = team2.getElo() + (getStartingStrength(sortTeam2) * 15 * 0.25);
+
+        double lambda1 = 10 + (teamStrength1 - teamStrength2) * 0.01;
+        double lambda2 = 10 + (teamStrength1 - teamStrength2) * 0.01;
+
+        int expectedAttacksA = poissonRandom(lambda1);
+        int expectedAttacksB = poissonRandom(lambda2);
+        playMatch(sortTeam1, sortTeam2, expectedAttacksA, expectedAttacksB);
+    }
+
+    private double getStartingStrength(Set<Spieler> sortTeam){
+        int count = 1;
+        double getStrengthTeam = 0;
+            for (Spieler p : sortTeam){
+                if ((count >= 1 && count <= 3) && p.getPosition().equals(POSITION.ATT)){
+                    count++;
+                    getStrengthTeam++;
+                }
+                if ((count >= 4 && count <= 6) && p.getPosition().equals(POSITION.MID)){
+                    count++;
+                    getStrengthTeam++;
+                }
+                if ((count >= 7 && count <= 10) && p.getPosition().equals(POSITION.DEF)){
+                    count++;
+                    getStrengthTeam++;
+                }
+                if (count < 10 && p.getPosition().equals(POSITION.GK)){
+                    count++;
+                    getStrengthTeam++;
+                }
             }
+            return getStrengthTeam / 11;
+    }
+    private double attackStrength(Set<Spieler> players){
+        double strength = 0;
+        for (Spieler p : players) {
+            if (p.getPosition().equals(POSITION.ATT)) strength += p.getRating();
+            if (p.getPosition().equals(POSITION.MID)) strength += 0.5*p.getRating();
+        }
+        return strength;
+    }
+    private double defenseStrength(Set<Spieler> players) {
+        double strength = 0;
+        for (Spieler p : players) {
+            if (p.getPosition().equals(POSITION.DEF)) strength += p.getRating();
+            if (p.getPosition().equals(POSITION.MID)) strength += 0.5*p.getRating();
+        }
+        return strength;
+    }
+
+    private void playMatch(Set<Spieler> playersA, Set<Spieler> playersB, int expectedAttacksA, int expectedAttacksB){
+        double attackStrength = attackStrength(playersA);
+        double defenseStrength = defenseStrength(playersB);
+        int goalsA = 0;
+        int onTargetA = 0;
+        int offTargetA = 0;
+        int blockedByB = 0;
+        double attackQualityA = attackStrength / (attackStrength + defenseStrength); //quality between 0 and 1
+        for (int i = 0; i < expectedAttacksA; i++) {
+            if (Math.random() < attackQualityA){
+                if (Math.random() < 0.3 + attackQualityA * 0.4) {
+                    onTargetA++;
+                    Spieler goalkeeper = new Spieler();
+                    for (Spieler p : playersB){
+                        if (p.getPosition().equals(POSITION.GK)){ goalkeeper = p;
+                        }
+                    }
+                    double saveChance = goalkeeper.getRating() / (goalkeeper.getRating() + attackStrength/4.5);
+                    if (Math.random() > saveChance){
+                        goalsA++;
+                    }
+                }
+                else offTargetA++;
+            }
+            else blockedByB++;
         }
     }
 
-    public static int calculateGoals(float eloA, float eloB) {
-        double eloDiff = eloA - eloB;
-        eloDiff = Math.max(-150, Math.min(150, eloDiff));
-
-        double advantage = 1.0 / (1.0 + Math.exp(-eloDiff / 200.0));
-        double expectedGoals = 0.8 + advantage * 1.0f;
-
-        return poissonRandom(expectedGoals);
-    }
-
     private static int poissonRandom(double lambda) {
-        double multi = 1.4;
-        lambda *= multi;
         double L = Math.exp(-lambda);
         double p = 1.0;
         int k = 0;
@@ -112,6 +141,4 @@ public class Match {
             b.elo = eloB + k*(0.5f-chanceForB);
         }
     }
-
-
 }
