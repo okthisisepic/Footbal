@@ -211,4 +211,8 @@ public class MW {
 
 
     }
+    public void createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare() {
+        JFrame createwindow = new JFrame();
+        createwindow.setSize();
+    }
 }
