@@ -64,6 +64,7 @@ public class MW {
             @Override
             public void actionPerformed(ActionEvent e) {
                 run();
+                startWindow.dispose();
             }
         });
     }
