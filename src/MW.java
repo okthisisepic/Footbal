@@ -20,35 +20,43 @@ public class MW {
         Thread.sleep(500);
         System.out.println("stealing");
         Thread.sleep(500);
-        start();
+        System.out.println("Its time");
+        Thread.sleep(500);
+        System.out.println("to play");
+        Thread.sleep(500);
+        System.out.println("with some");
+        Thread.sleep(500);
+        System.out.println("B A L L S");
+        Thread.sleep(500);
+        createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare();
 
     }
-    public void start() {
+    public void createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare() {
 
         JFrame startWindow = new JFrame("Fobal simulator");
 
         // Zentriert Inhalte horizontal + vertikal
         JPanel startPanel = new JPanel(new GridBagLayout());
+        startPanel.setBackground(Color.blue);
 
         // Container für die Elemente untereinander
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel startLabel = new JLabel("Fantasy Football Simulator");
+        JLabel startLabel = new JLabel("Fobal simulator");
         JButton createLeagues = new JButton("Create Leagues");
-        JButton viewLeagues = new JButton("View Leagues");
+
 
         // Horizontal mittig
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
-        viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         // Elemente hinzufügen
         content.add(startLabel);
         content.add(Box.createVerticalStrut(20));
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
-        content.add(viewLeagues);
 
         // Content in die Mitte setzen
         startPanel.add(content);
@@ -64,6 +72,7 @@ public class MW {
             @Override
             public void actionPerformed(ActionEvent e) {
                 run();
+                startWindow.dispose();
             }
         });
     }
@@ -193,7 +202,7 @@ public class MW {
 
     public void gaming() {
         JPanel Gamewindow = new JPanel();
-        JLabel gaming = new JLabel("G A M I N G");
+        JButton gaming = new JButton("G A M I N G");
         Gamewindow.add(gaming);
         Gamewindow.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
         window.add(Gamewindow, BorderLayout.CENTER); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
@@ -227,4 +236,5 @@ public class MW {
 
 
     }
+
 }
