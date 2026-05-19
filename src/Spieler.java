@@ -1,6 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 enum POSITION{ATT, MID, DEF, GK}
 
@@ -59,7 +60,31 @@ public class Spieler {
         return position;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void teststats() {
         System.out.println("Name: "+getName()+" price: "+getPrice()+"$ rating: "+getRating()+" position: "+getPosition());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Spieler spieler = (Spieler) o;
+        return Objects.equals(name, spieler.name) && position == spieler.position;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, position);
     }
 }
