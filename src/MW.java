@@ -20,35 +20,35 @@ public class MW {
         Thread.sleep(500);
         System.out.println("stealing");
         Thread.sleep(500);
-        start();
+        createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare();
 
     }
-    public void start() {
+    public void createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare() {
 
         JFrame startWindow = new JFrame("Fobal simulator");
 
         // Zentriert Inhalte horizontal + vertikal
         JPanel startPanel = new JPanel(new GridBagLayout());
+        startPanel.setBackground(Color.blue);
 
         // Container für die Elemente untereinander
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel startLabel = new JLabel("Fantasy Football Simulator");
+        JLabel startLabel = new JLabel("Fobal simulator");
         JButton createLeagues = new JButton("Create Leagues");
-        JButton viewLeagues = new JButton("View Leagues");
+
 
         // Horizontal mittig
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
-        viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         // Elemente hinzufügen
         content.add(startLabel);
         content.add(Box.createVerticalStrut(20));
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
-        content.add(viewLeagues);
 
         // Content in die Mitte setzen
         startPanel.add(content);
@@ -227,8 +227,5 @@ public class MW {
 
 
     }
-    public void createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare() {
-        JFrame createwindow = new JFrame();
-        createwindow.setSize();
-    }
+
 }
