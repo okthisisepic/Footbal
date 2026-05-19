@@ -48,6 +48,59 @@ public class Team {
             return players;
         }
 
+    public String getName() {
+        return name;
+    }
+
+    public List<Spieler> getPlayers() {
+        return players;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public int getGames() {
+        return games;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public int getGoals() {
+        return goals;
+    }
+
+    public int getGoalsAgainst() {
+        return goalsAgainst;
+    }
+
+    public int getGoalsTotal() {
+        return goalsTotal;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public int getChampionships() {
+        return championships;
+    }
+
+    public float getElo() {
+        return elo;
+    }
+
+        /*
         public static void playGame(Team a, Team b, int toreA, int toreB){
             System.out.println();
             System.out.println(a.name+" "+toreA+" - "+toreB+" "+b.name);
@@ -102,7 +155,7 @@ public class Team {
 
         return k - 1;
     }
-
+         */
 
     public static void updateElo(Team a, Team b, int toreA, int toreB){
             final int k = 32;

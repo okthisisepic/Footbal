@@ -20,7 +20,7 @@ public class TeamMain {
                             Team team2 = l.getTeams().get(teamAmount - 1 - j);
                             if (!team1.name.equals("Free") && !team2.name.equals("Free")) {
                                 clearScreen();
-                                Team.playGame(team1, team2, Team.calculateGoals(team1.elo, team2.elo), Team.calculateGoals(team2.elo, team1.elo));
+                                //Team.playGame(team1, team2, Team.calculateGoals(team1.elo, team2.elo), Team.calculateGoals(team2.elo, team1.elo));
                             }
                         }
                         Collections.rotate(l.getTeams().subList(1, teamAmount), 1);

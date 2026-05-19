@@ -20,14 +20,14 @@ public class Spieler {
             String[] names = line.getFirst().split(",");
             //Name generieren
             name += names[(int) (Math.random()* names.length)];
-            name += " "+names[(int) (Math.random()* names.length)];
+            name += names[(int) (Math.random()* names.length)];
             price = Math.nextUp(Math.random()*100000);
             int decidePosition = (int) (Math.random()*11);
             rating = (int) (Math.random() * 65) + 35;
             if (decidePosition == 10){
                 position = POSITION.GK;
             }
-            if (decidePosition < 9){
+            if (decidePosition <= 9){
                 position = POSITION.DEF;
             }
             if (decidePosition < 6){
@@ -37,10 +37,10 @@ public class Spieler {
                 position = POSITION.ATT;
             }
             teststats();
+            System.out.println(decidePosition);
         } catch (Exception e){
             System.out.println("Fehler beim Spieler generieren!");
         }
-        teststats();
     }
 
     public String getName() {
