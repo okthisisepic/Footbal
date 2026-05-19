@@ -20,6 +20,14 @@ public class MW {
         Thread.sleep(500);
         System.out.println("stealing");
         Thread.sleep(500);
+        System.out.println("Its time");
+        Thread.sleep(500);
+        System.out.println("to play");
+        Thread.sleep(500);
+        System.out.println("with some");
+        Thread.sleep(500);
+        System.out.println("B A L L S");
+        Thread.sleep(500);
         createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare();
 
     }
@@ -194,7 +202,7 @@ public class MW {
 
     public void gaming() {
         JPanel Gamewindow = new JPanel();
-        JLabel gaming = new JLabel("G A M I N G");
+        JButton gaming = new JButton("G A M I N G");
         Gamewindow.add(gaming);
         Gamewindow.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
         window.add(Gamewindow, BorderLayout.CENTER); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
