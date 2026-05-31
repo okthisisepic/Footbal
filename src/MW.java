@@ -35,21 +35,20 @@ public class MW {
 
         JFrame startWindow = new JFrame("Fobal simulator");
 
-        // Zentriert Inhalte horizontal + vertikal
         JPanel startPanel = new JPanel(new GridBagLayout());
         startPanel.setBackground(Color.blue);
 
-        // Container für die Elemente untereinander
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
         JLabel startLabel = new JLabel("Fobal simulator");
         JButton createLeagues = new JButton("Create Leagues");
+        JButton viewLeagues = new JButton("View Leagues");
 
 
-        // Horizontal mittig
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+        viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
         // Elemente hinzufügen
@@ -57,6 +56,7 @@ public class MW {
         content.add(Box.createVerticalStrut(20));
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
+        content.add(viewLeagues);
 
         // Content in die Mitte setzen
         startPanel.add(content);
@@ -73,6 +73,13 @@ public class MW {
             public void actionPerformed(ActionEvent e) {
                 run();
                 startWindow.dispose();
+            }
+        });
+
+        viewLeagues.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }
@@ -162,16 +169,58 @@ public class MW {
     }
 
     public void contentbroswer() {
-        JPanel Contentbroswer = new JPanel();
-
-        Contentbroswer.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        JButton createbutton = new JButton("Create your league:name and amount of teams");
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        JPanel mainContent = new JPanel();
+        mainContent.setLayout(new BoxLayout(mainContent, BoxLayout.Y_AXIS));
+        JPanel displayTierPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel leagueNameContent = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel inputTeamsContent = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel averageRatingContent = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel setEloContent = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel setPromotionRelegationContent = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JPanel Contentbroswer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        JLabel displayTier = new JLabel(String.format("Tier:  %n",Inventory.tier));
+        JLabel labelForLeagueName  = new JLabel("Insert the name of your desired league");
+        JTextField leagueName = new JTextField(20);
+        JLabel labelForInputTeams  = new JLabel("Insert your teams by name, seperate with ','.");
+        JTextField inputTeams = new JTextField(20);
+        JLabel labelForAverageRating  = new JLabel("Set the average rating for players in this league (default 50)");
+        JTextField averageRating = new JTextField(20);
+        JLabel labelForSetElo  = new JLabel("Set ELO-Rating (default 500)");
+        JTextField setElo = new JTextField(20);
+        JLabel labelForSetPromotion  = new JLabel("Set number of teams to promote to next upper tier");
+        JTextField setPromotion = new JTextField(20);
+        displayTierPanel.add(displayTier);
+        leagueNameContent.add(labelForLeagueName);
+        leagueNameContent.add(leagueName);
+        inputTeamsContent.add(labelForInputTeams);
+        inputTeamsContent.add(inputTeams);
+        averageRatingContent.add(labelForAverageRating);
+        averageRatingContent.add(averageRating);
+        setEloContent.add(labelForSetElo);
+        setEloContent.add(setElo);
+        setPromotionRelegationContent.add(labelForSetPromotion);
+        setPromotionRelegationContent.add(setPromotion);
+        setPromotionRelegationContent.setVisible(Inventory.tier != 0);
+        displayTierPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leagueNameContent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputTeamsContent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        averageRatingContent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setEloContent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setPromotionRelegationContent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainContent.add(displayTierPanel);
+        mainContent.add(leagueNameContent);
+        mainContent.add(inputTeamsContent);
+        mainContent.add(averageRatingContent);
+        mainContent.add(setEloContent);
+        mainContent.add(setPromotionRelegationContent);
+        mainPanel.add(mainContent);
+        window.add(mainPanel,BorderLayout.CENTER);
+        JButton createbutton = new JButton("Create League");
         JTextField name = new JTextField(10); //10 ist die längedes felds
         JLabel nameofleague = new JLabel("Inventory.league.name");
         nameofleague.setForeground(Color.blue);
         Contentbroswer.add(createbutton);
-        Contentbroswer.add(name);
-        Contentbroswer.add(nameofleague);
         nameofleague.setVisible(false);
         createbutton.setFocusable(false);
         JTextField amount = new JTextField(10);
@@ -181,19 +230,17 @@ public class MW {
         createbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!name.getText().isEmpty() & !name.getText().isBlank() & !amount.getText().isEmpty() & !amount.getText().isBlank()) {
-                    if (Integer.parseInt(amount.getText()) >10) {
-                        System.out.println("no we are not doing ts thats way to many teams");
-                    } else {
-                        Inventory.createleague(name.getText(), Integer.parseInt(amount.getText()));
+                if (!leagueName.getText().isBlank() && !inputTeams.getText().isBlank()) {
+                        String[] teamNames = inputTeams.getText().split(",");
+                        Inventory.createleague(leagueName.getText(), teamNames.length);
                         createbutton.setVisible(false);
                         name.setVisible(false);
                         nameofleague.setText(Inventory.league.getName());
                         nameofleague.setVisible(true);
                         amount.setVisible(false);
+                        mainPanel.setVisible(false);
                         Taskbar();
                         gaming();
-                    }
                 }
             }
         });
