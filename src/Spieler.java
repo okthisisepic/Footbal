@@ -37,8 +37,6 @@ public class Spieler {
             if (decidePosition < 3){
                 position = POSITION.ATT;
             }
-            teststats();
-            System.out.println(decidePosition);
         } catch (Exception e){
             System.out.println("Fehler beim Spieler generieren!");
         }

@@ -7,7 +7,6 @@ import java.util.concurrent.Flow;
 // in this class not only is the ui stored here but also the inventory for direct access to the ui
 public class MW {
     private JFrame window;
-    public static Inventory inventory = new Inventory();
 
     public MW() throws InterruptedException {
         System.out.println("Stealing your ram....");
@@ -34,23 +33,17 @@ public class MW {
     public void createwindowwhichisseperateforsomeweirdreasonbutididntdecidethatitwasntmeitsjustthatensarreallyreallywantsthistobeseperatesohereweare() {
 
         JFrame startWindow = new JFrame("Fobal simulator");
-
-        // Zentriert Inhalte horizontal + vertikal
         JPanel startPanel = new JPanel(new GridBagLayout());
         startPanel.setBackground(Color.blue);
 
-        // Container für die Elemente untereinander
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
         JLabel startLabel = new JLabel("Fobal simulator");
         JButton createLeagues = new JButton("Create Leagues");
 
-
-        // Horizontal mittig
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
-
 
         // Elemente hinzufügen
         content.add(startLabel);
@@ -58,11 +51,9 @@ public class MW {
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
 
-        // Content in die Mitte setzen
+
         startPanel.add(content);
-
         startWindow.add(startPanel);
-
         startWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         startWindow.setSize(700, 700);
         startWindow.setLocationRelativeTo(null);
@@ -233,8 +224,6 @@ public class MW {
         invenwindow.add(Scrollbox);
 
         Teamlist.setBackground(Color.green);
-
-
     }
 
 }

@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+
+
+// Only for experimental purposes, NOT IN THE PROJECT STRUCTURE!
 public class TeamMain {
     public static ArrayList<League> leagues = new ArrayList<>();
     static int tier = 0;
