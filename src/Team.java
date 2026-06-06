@@ -18,16 +18,20 @@ public class Team {
         float elo;
 
         public Team(String name){
-            this(name,0,0,0,0,0,0,0,0,0,500);
+            this(name,0,0,0,0,0,0,0,0,0,500,50);
         }
 
         public Team(String name,float elo){
-            this(name,0,0,0,0,0,0,0,0,0,elo);
+            this(name,0,0,0,0,0,0,0,0,0,elo,50);
         }
 
-        public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo){
+        public Team(String name,float elo, double rating){
+        this(name,0,0,0,0,0,0,0,0,0,elo,rating);
+    }
+
+        public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo,double rating){
             this.name = name;
-            this.players = generatePlayerList();
+            this.players = generatePlayerList(rating);
             this.games = games;
             this.wins = wins;
             this.draws = draws;
@@ -40,11 +44,11 @@ public class Team {
             this.elo = elo;
         }
 
-        public List<Spieler> generatePlayerList(){
+        public List<Spieler> generatePlayerList(double rating){
             while (true) {
                 List<Spieler> players = new ArrayList<>();
                 for (int i = 0; i < 20; i++) {
-                    players.add(new Spieler());
+                    players.add(new Spieler(rating));
                 }
                 int countAttackers = 0;
                 int countMidfielders = 0;

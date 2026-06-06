@@ -6,36 +6,26 @@ public class League {
     private int tier;
     private int promotion;
     private int relegation;
-    private int amount;
     private ArrayList<Team> teams;
     private ArrayList<Team> champions;
 
     public League(String name, int tier) {
-        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>(),0);
+        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>());
     }
 
-    public League(String name, int tier, int amount) {
-        this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>(),amount);
+    public League(String name, int tier, int promotion) {
+        this(name, tier, promotion, 0, new ArrayList<>(), new ArrayList<>());
     }
 
-    public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions, int amount) {
+    public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions) {
         this.name = name;
         this.tier = tier;
         this.promotion = promotion;
         this.relegation = relegation;
         this.teams = teams;
         this.champions = champions;
-        this.amount = amount;
-        makesumteasm();
     }
 
-    public void makesumteasm() {
-        List<Spieler> empty= new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            teams.add(new Team(name+" Team "+(i+1)));
-        }
-
-    }
 
     public String getName() {
         return name;
@@ -47,10 +37,6 @@ public class League {
 
     public int getTier() {
         return tier;
-    }
-
-    public void setTier(int tier) {
-        this.tier = tier;
     }
 
     public int getPromotion() {
@@ -73,12 +59,12 @@ public class League {
         return teams;
     }
 
-    public ArrayList<Team> getChampions() {
-        return champions;
+    public void setTeam(Team team) {
+        teams.add(team);
     }
 
-    public int getAmount() {
-        return amount;
+    public ArrayList<Team> getChampions() {
+        return champions;
     }
 
     public void showTable() {

@@ -11,11 +11,11 @@ public class Spieler {
     private double rating;
     private POSITION position;
 
-    public Spieler() {
-        generatePlayer();
+    public Spieler(double rating) {
+        generatePlayer(rating);
     }
 
-    public void generatePlayer() {
+    public void generatePlayer(double rating) {
         try {
             List<String> line = Files.readAllLines(Path.of("src/namenliste.txt"));
             String[] names = line.getFirst().split(",");
@@ -24,7 +24,7 @@ public class Spieler {
             name += names[(int) (Math.random()* names.length)];
             price = Math.nextUp(Math.random()*100000);
             int decidePosition = (int) (Math.random()*11);
-            rating = (int) (Math.random() * 65) + 35;
+            this.rating = (int) ((Math.random() * 30) - 15 + rating);
             if (decidePosition == 10){
                 position = POSITION.GK;
             }

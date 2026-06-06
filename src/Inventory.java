@@ -6,7 +6,7 @@ public class Inventory {
     public static int mone = 1000000;
     public static String[] preferredPositions = {"Torwart","Innenverteidiger","Außenverteidiger","DefensiverMittelspieler","ZentralMittelfeldSpieler","RechterFlügelSpieler","LinkerFlügelSpieler","OffensiverMittelFeldSpieler"};
     public static List<Spieler> spielerinventory = new ArrayList<>();
-    public static League league;
+    public static ArrayList<League> leagues = new ArrayList<>();
     public static String[] players = {"Liam Carter","Noah Müller","Ethan Rossi","Lucas Silva","Oliver Schmidt","James Anderson","Mateo Fernández","Daniel Novak","Adrian Kowalski","Santiago Reyes","Felix Wagner","Marco Bianchi","Hugo Laurent","Ryan Thompson","Kai Nakamura","Zlatan Ibramhimovich ","Sand vich","Nintendo Switch","Goal Messi","Penalty Ronaldo","Harry Kane Jr","John Kickball","FC WiFi","Thomas Milch","Speedy Gonzalez FC","Small toe","Ensar Turkyeeee","Alex","Withalm Rapid","Baller","T80 fuken balling"};
     public static int tier = 0;
     public static void buyrandomcommonplayerpack() {
@@ -18,7 +18,7 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 40) + 1;
             int runningspeed = (int) (Math.random() * 3) + 1;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler();
+            Spieler p = new Spieler(range);
             spielerinventory.add(p);
         }
     }
@@ -31,7 +31,7 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 70) + 40;
             int runningspeed = (int) (Math.random() * 6) + 3;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler();
+            Spieler p = new Spieler(range);
             spielerinventory.add(p);
         }
     }
@@ -44,12 +44,22 @@ public class Inventory {
             int accuracy = (int) (Math.random() * 100) + 60;
             int runningspeed = (int) (Math.random() * 10) + 8;
             String Position = preferredPositions[(int) (Math.random() * 7)];
-            Spieler p = new Spieler();
+            Spieler p = new Spieler(range);
             spielerinventory.add(p);
         }
     }
-    public static void createleague(String name ,int amount) {
-        List<Team> empty= new ArrayList<>();
-        league = new League(name,0,amount);
+    public static void createLeague(String name, int promotion) {
+        if (tier == 0) leagues.add(new League(name,tier));
+        else {
+            leagues.add(new League(name, tier, promotion));
+            leagues.get(tier-1).setRelegation(promotion);
+        }
+        System.out.println("League created!");
+    }
+    public static void makeTeams(String[] names, float elo, double rating) {
+        for (String name : names){
+            leagues.get(tier).setTeam(new Team(name,elo,rating));
+        }
+        System.out.println("Teams created!");
     }
 }
