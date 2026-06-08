@@ -22,8 +22,8 @@ public class Match {
         double teamStrength1 = team1.getElo() + (getStartingStrength(sortTeam1) * 15 * 0.25);
         double teamStrength2 = team2.getElo() + (getStartingStrength(sortTeam2) * 15 * 0.25);
 
-        double lambda1 = 10 + (teamStrength1 - teamStrength2) * 0.01;
-        double lambda2 = 10 + (teamStrength1 - teamStrength2) * 0.01;
+        double lambda1 = 15 + (teamStrength1 - teamStrength2) * 0.015;
+        double lambda2 = 15 + (teamStrength1 - teamStrength2) * 0.015;
 
         int expectedAttacksA = poissonRandom(lambda1);
         int expectedAttacksB = poissonRandom(lambda2);
@@ -31,29 +31,23 @@ public class Match {
     }
 
     private double getStartingStrength(List<Spieler> sortTeam){
-        int count = 1;
+        int countAttackers = 0;
+        int countMidfielders = 0;
+        int countDefenders = 0;
+        int countGoalkeepers = 0;
         double getStrengthTeam = 0;
             for (Spieler p : sortTeam){
-                if ((count >= 1 && count <= 3) && p.getPosition().equals(POSITION.ATT)){
-                    count++;
-                    getStrengthTeam++;
-                }
-                if ((count >= 4 && count <= 6) && p.getPosition().equals(POSITION.MID)){
-                    count++;
-                    getStrengthTeam++;
-                }
-                if ((count >= 7 && count <= 10) && p.getPosition().equals(POSITION.DEF)){
-                    count++;
-                    getStrengthTeam++;
-                }
-                if (count < 10 && p.getPosition().equals(POSITION.GK)){
-                    count++;
-                    getStrengthTeam++;
+                if (countAttackers <= 3 && countMidfielders <= 3 && countDefenders <= 4 && countGoalkeepers <= 1){
+                    getStrengthTeam += p.getRating();
+                    if (p.getPosition().equals(POSITION.ATT)) countAttackers++;
+                    if (p.getPosition().equals(POSITION.MID)) countMidfielders++;
+                    if (p.getPosition().equals(POSITION.DEF)) countDefenders++;
+                    if (p.getPosition().equals(POSITION.GK)) countGoalkeepers++;
                 }
             }
             return getStrengthTeam / 11;
     }
-    private double attackStrength(List<Spieler> players){
+    private double getAttackStrength(List<Spieler> players){
         double strength = 0;
         for (Spieler p : players) {
             if (p.getPosition().equals(POSITION.ATT)) strength += p.getRating();
@@ -61,7 +55,7 @@ public class Match {
         }
         return strength;
     }
-    private double defenseStrength(List<Spieler> players) {
+    private double getDefenseStrength(List<Spieler> players) {
         double strength = 0;
         for (Spieler p : players) {
             if (p.getPosition().equals(POSITION.DEF)) strength += p.getRating();
@@ -85,8 +79,8 @@ public class Match {
 
     private int calculateAttacks(Team attackingTeam,Team defendingTeam,List<Spieler> playersAttacking, List<Spieler> playersDefending, int expectedAttacks){
         // calculate chances
-        double attackStrength = attackStrength(playersAttacking);
-        double defenseStrength = defenseStrength(playersDefending);
+        double attackStrength = getAttackStrength(playersAttacking);
+        double defenseStrength = getDefenseStrength(playersDefending);
         int goals = 0;
         int onTarget = 0;
         int offTarget = 0;
@@ -97,7 +91,6 @@ public class Match {
             if (Math.random() < attackQuality){
                 if (Math.random() < 0.3 + attackQuality * 0.4) {
                     onTarget++;
-
                     boolean goalkeeperInitialized = false;
                     for (Spieler p : playersDefending) {
                         if (p.getPosition().equals(POSITION.GK) && !goalkeeperInitialized) {
@@ -105,7 +98,7 @@ public class Match {
                             goalkeeperInitialized = true;
                         }
                     }
-                    double saveChance = goalkeeper.getRating() / (goalkeeper.getRating() + attackStrength/4.5);
+                    double saveChance = goalkeeper.getRating() / (goalkeeper.getRating() + attackStrength/6);
                     if (Math.random() > saveChance){
                         goals++;
                     }
@@ -125,18 +118,18 @@ public class Match {
             if (attackers.size() <= 3) {
                 if (p.getPosition().equals(POSITION.ATT)) attackers.add(p);
             }
-            if (midfieldersA.size() <= 4) {
+            if (midfieldersA.size() <= 3) {
                 if (p.getPosition().equals(POSITION.MID)) midfieldersA.add(p);
             }
         }
         for (Spieler p : playersDefending){
-            if (midfieldersB.size() <= 4) {
+            if (midfieldersB.size() <= 3) {
                 if (p.getPosition().equals(POSITION.MID)) midfieldersB.add(p);
             }
             if (defenders.size() <= 4) {
                 if (p.getPosition().equals(POSITION.DEF)) defenders.add(p);
             }
-                if (p.getPosition().equals(POSITION.DEF) && p.getRating() > goalkeeper.getRating()) goalkeeper = p;
+                if (p.getPosition().equals(POSITION.GK) && p.getRating() > goalkeeper.getRating()) goalkeeper = p;
         }
         // calculate ratings
         // per goals
@@ -149,7 +142,6 @@ public class Match {
                 int select = (int) (Math.random()*3);
                 midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()+0.2);
             }
-            goalkeeper.setRating(goalkeeper.getRating()-0.15);
         }
 
             for (int i = 0; i < onTarget; i++) {
@@ -217,7 +209,7 @@ public class Match {
                 }
             }
         }
-        goalkeeper.setRating((onTarget-goals)*0.2);
+        goalkeeper.setRating(goalkeeper.getRating()+(onTarget-goals)*0.15);
         attackingTeam.goals+=goals;
         defendingTeam.goalsAgainst+=goals;
         // replace players
@@ -256,10 +248,10 @@ public class Match {
                 }
             }
         }
-
-        for (Spieler p : defendingTeam.getPlayers()) {
-            for (int i = 0; i < defendingTeam.players.size(); i++) {
-                if (p.getPosition().equals(POSITION.GK)) defendingTeam.players.set(i,goalkeeper); break;
+        for (int i = 0; i < defendingTeam.players.size(); i++) {
+            if (defendingTeam.players.get(i).equals(goalkeeper)){
+                defendingTeam.players.set(i, goalkeeper);
+                break;
             }
         }
         System.out.println("Goals: "+goals);

@@ -32,7 +32,7 @@ public class TeamMain {
                 }
                 System.out.println();
             } else System.out.println("Create a league first!");
-            l.afterSeason();
+            //l.afterSeason();
         }
         System.out.println("Session ended, create new teams or start a new season");
         newSeason();

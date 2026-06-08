@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +13,7 @@ public class League {
     private ArrayList<Team> teams;
     private ArrayList<Team> champions;
     private ArrayList<ArrayList<Match>> matchdays = new ArrayList<>();
-    private int countMatchday = 0;
+    private int countMatchday = 1;
     private JPanel resultsPanel = new JPanel();
 
     public League(String name, int tier) {
@@ -84,6 +86,53 @@ public class League {
         this.countMatchday = countMatchday;
     }
 
+    public JPanel getResultsPanel() {
+        return resultsPanel;
+    }
+
+    public void clearPanel(){
+        resultsPanel.removeAll();
+    }
+
+
+    public DefaultTableModel constructTable(){
+        DefaultTableModel table = new DefaultTableModel();
+        List<Team> teams = new ArrayList<>(getTeams());
+        teams.sort((team1, team2) -> {
+            if (team2.points > team1.points) {
+                return 1;
+            }
+            if (team1.points == team2.points) {
+                if (team2.goalsTotal > team1.goalsTotal) {
+                    return 1;
+                } else if (team1.goalsTotal == team2.goalsTotal) {
+                    if (team2.goals > team1.goals) {
+                        return 1;
+                    } else return -1;
+                } else return -1;
+            } else return -1;
+        });
+        table.addColumn("Pos");
+        table.addColumn("Team");
+        table.addColumn("MP");
+        table.addColumn("W");
+        table.addColumn("D");
+        table.addColumn("L");
+        table.addColumn("GS");
+        table.addColumn("GC");
+        table.addColumn("GD");
+        table.addColumn("P");
+        table.addRow(new Object[]{"Pos","Team","MP","W","D","L","GS","GC","GD","P"});
+        int place = 1;
+        for (Team t : teams){
+            if (!(t.getName().equals("Free"))) {
+                table.addRow(new Object[]{place, t.getName(), t.getGames(), t.getWins(), t.getDraws(), t.getLosses(), t.getGoals(), t.getGoalsAgainst(), t.getGoalsTotal(), t.getPoints()});
+                place++;
+            }
+        }
+        return table;
+    }
+
     public void makeMatchdayPlan() {
         if (teams.size() % 2 != 0) {
             teams.add(new Team("Free"));
@@ -105,28 +154,9 @@ public class League {
                 }
                 matchdays.add(matches);
                 Collections.rotate(teams.subList(1, teamAmount), 1);
+                resultsPanel.setLayout(new BoxLayout(resultsPanel,BoxLayout.Y_AXIS));
             }
         }
-    }
-
-    public void afterSeason(){
-        Team champion = new Team("null");
-        int points = 0;
-            for (Team t : this.getTeams()) {
-                if (points < t.points) {
-                    champion = t;
-                    points = t.points;
-                }
-                if (champion.points == t.points) {
-                    if (t.goalsTotal > champion.goalsTotal) {
-                        champion = t;
-                    }
-                }
-            }
-        System.out.println(champion.name+" has won the league!");
-        System.out.println();
-        champions.add(champion);
-        champion.championships++;
     }
 }
 

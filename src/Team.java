@@ -44,15 +44,16 @@ public class Team {
         }
 
         public List<Spieler> generatePlayerList(double rating){
+            int countAttackers = 0;
+            int countMidfielders = 0;
+            int countDefenders = 0;
+            int countGoalkeepers = 0;
             while (true) {
                 List<Spieler> players = new ArrayList<>();
                 for (int i = 0; i < 20; i++) {
                     players.add(new Spieler(rating));
                 }
-                int countAttackers = 0;
-                int countMidfielders = 0;
-                int countDefenders = 0;
-                int countGoalkeepers = 0;
+
                 for (Spieler p : players){
                     switch (p.getPosition()){
                         case ATT -> countAttackers++;
@@ -61,8 +62,11 @@ public class Team {
                         case GK -> countGoalkeepers++;
                     }
                 }
-                if (countAttackers >= 3 && countMidfielders >= 3 && countDefenders >= 4 && countGoalkeepers >= 1) return players;
-                else players.clear();
+                if (countAttackers >= 3 && countMidfielders >= 3 && countDefenders >= 4 && countGoalkeepers >= 1){ return players;}
+                else{
+                    countAttackers = countMidfielders = countDefenders = countGoalkeepers = 0;
+                    players.clear();
+                }
             }
         }
 

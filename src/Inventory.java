@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    public static int mone = 1000000;
-    public static String[] preferredPositions = {"Torwart","Innenverteidiger","Außenverteidiger","DefensiverMittelspieler","ZentralMittelfeldSpieler","RechterFlügelSpieler","LinkerFlügelSpieler","OffensiverMittelFeldSpieler"};
-    public static List<Spieler> spielerinventory = new ArrayList<>();
+    //public static int mone = 1000000;
     public static ArrayList<League> leagues = new ArrayList<>();
-    public static String[] players = {"Liam Carter","Noah Müller","Ethan Rossi","Lucas Silva","Oliver Schmidt","James Anderson","Mateo Fernández","Daniel Novak","Adrian Kowalski","Santiago Reyes","Felix Wagner","Marco Bianchi","Hugo Laurent","Ryan Thompson","Kai Nakamura","Zlatan Ibramhimovich ","Sand vich","Nintendo Switch","Goal Messi","Penalty Ronaldo","Harry Kane Jr","John Kickball","FC WiFi","Thomas Milch","Speedy Gonzalez FC","Small toe","Ensar Turkyeeee","Alex","Withalm Rapid","Baller","T80 fuken balling"};
     public static int tier = 0;
+    /*
     public static void buyrandomcommonplayerpack() {
         if (mone >= 5000) {
             mone -= 5000;
@@ -49,6 +47,8 @@ public class Inventory {
             spielerinventory.add(p);
         }
     }
+
+     */
     public static void createLeague(String name, int promotion) {
         if (tier == 0) leagues.add(new League(name,tier));
         else {
@@ -64,39 +64,47 @@ public class Inventory {
         leagues.get(tier).makeMatchdayPlan();
         System.out.println("Teams created!");
     }
-    public static DefaultTableModel constructTable(League l){
-        DefaultTableModel table = new DefaultTableModel();
-        List<Team> teams = new ArrayList<>(l.getTeams());
-        teams.sort((team1, team2) -> {
-            if (team2.points > team1.points) {
-                return 1;
-            }
-            if (team1.points == team2.points) {
-                if (team2.goalsTotal > team1.goalsTotal) {
+
+    public static void newSeason(){
+        for (League l : leagues) {
+            l.getTeams().sort((team1, team2) -> {
+                if (team2.points > team1.points) {
                     return 1;
-                } else if (team1.goalsTotal == team2.goalsTotal) {
-                    if (team2.goals > team1.goals) {
+                }
+                if (team1.points == team2.points) {
+                    if (team2.goalsTotal > team1.goalsTotal) {
                         return 1;
+                    } else if (team1.goalsTotal == team2.goalsTotal) {
+                        if (team2.goals > team1.goals) {
+                            return 1;
+                        } else return -1;
                     } else return -1;
                 } else return -1;
-            } else return -1;
-        });
-        table.addColumn("Pos");
-        table.addColumn("Team");
-        table.addColumn("MP");
-        table.addColumn("W");
-        table.addColumn("D");
-        table.addColumn("L");
-        table.addColumn("GS");
-        table.addColumn("GC");
-        table.addColumn("GD");
-        table.addColumn("P");
-        table.addRow(new Object[]{"Pos","Team","MP","W","D","L","GS","GC","GD","P"});
-        for (Team t : teams){
-            if (!(t.getName().equals("Free"))) {
-                table.addRow(new Object[]{1, t.getName(), t.getGames(), t.getWins(), t.getDraws(), t.getLosses(), t.getGoals(), t.getGoalsAgainst(), t.getGoalsTotal(), t.getPoints()});
+            });
+        }
+        //relegation
+        for (int i = 0; i < leagues.size()-1; i++) {
+            for (int j = 0; j < leagues.get(i).getRelegation(); j++) {
+                Team relegate = leagues.get(i).getTeams().get(leagues.get(i).getTeams().size()-j-2); //gets last place - last relegation spot
+                leagues.get(i+1).getTeams().add(relegate);
+                leagues.get(i).getTeams().remove(relegate);
             }
         }
-        return table;
+
+        //promotion
+        for (int i = 0; i < leagues.size()-1; i++) {
+            for (int j = 0; j < leagues.get(i+1).getPromotion(); j++) {
+                Team promote = leagues.get(i+1).getTeams().get(j); //gets last place - last relegation spot
+                leagues.get(i).getTeams().add(promote);
+                leagues.get(i+1).getTeams().remove(promote);
+            }
+        }
+        for (League l : leagues) {
+            for (Team t : l.getTeams()) {
+                t.wins = t.draws = t.losses = t.points = t.games = t.goals = t.goalsAgainst = t.goalsTotal = 0;
+            }
+            l.setCountMatchday(1);
+            l.clearPanel();
+        }
     }
 }

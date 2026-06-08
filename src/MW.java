@@ -11,22 +11,6 @@ public class MW {
     private JFrame window;
 
     public MW() throws InterruptedException {
-        System.out.println("Stealing your ram....");
-        Thread.sleep(500);
-        System.out.println("Mining bitcoin....");
-        Thread.sleep(500);
-        System.out.println("stealing your bandwidth....");
-        Thread.sleep(500);
-        System.out.println("Theft");
-        Thread.sleep(500);
-        System.out.println("stealing");
-        Thread.sleep(500);
-        System.out.println("Its time");
-        Thread.sleep(500);
-        System.out.println("to play");
-        Thread.sleep(500);
-        System.out.println("with some");
-        Thread.sleep(500);
         System.out.println("B A L L S");
         Thread.sleep(500);
         createStartWindow();
@@ -95,62 +79,36 @@ public class MW {
     }
 
     public void Taskbar() {
-
-
         JPanel TASKLEISTE = new JPanel();
-
         TASKLEISTE.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // hier kannst sagen, wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
-        JButton generatebutton = new JButton("commonplayer 5000$"); //button :3
-        generatebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
-
-
         //ImageIcon generateicon = new ImageIcon("generateiconPlaceHolder.png"); placeholder kannst ändern
         //generatebutton.setIcon(generateicon);
         //das Placeholder icon ist urr riesig nicht empfehlenswert
-
-        TASKLEISTE.add(generatebutton);
-        generatebutton.setToolTipText("Buy a common player for 5000$");
-        JButton rarebutton = new JButton("rare player 500000$"); //button :3
-        rarebutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
-
-        TASKLEISTE.add(generatebutton);
-        generatebutton.setToolTipText("Buy a common player for 5000$");
-
-        TASKLEISTE.add(rarebutton);
-        rarebutton.setToolTipText("Buy a rare player for 500000$");
-
-
-        JButton legendarybutton = new JButton("legendary player 5000000$"); //button :3
-        legendarybutton.setFocusable(false); //macht das du net unabsichtlich mit enter taste was drückst
-
-
-        TASKLEISTE.add(legendarybutton);
-        legendarybutton.setToolTipText("Buy a legendary player for 5000000$");
-
-        JLabel Monebar = new JLabel(Inventory.mone + "$");
-        Monebar.setToolTipText("Your money");
-        Monebar.setForeground(Color.green);
-        TASKLEISTE.add(Monebar);
         viewWindow.add(TASKLEISTE, BorderLayout.SOUTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
         TASKLEISTE.setBackground(Color.BLUE);
 
-        generatebutton.addActionListener(_ -> {
-            Inventory.buyrandomcommonplayerpack();
-            Monebar.setText(Inventory.mone + "$");
-        });
-        rarebutton.addActionListener(_ -> {
-            Inventory.buyrandomrareplayerpack();
-            Monebar.setText(Inventory.mone + "$");
-        });
-        legendarybutton.addActionListener(_ -> {
-            Inventory.buyrandomlegendaryplayerpack();
-            Monebar.setText(Inventory.mone + "$");
-        });
         JButton inventorybutton = new JButton("Inventory");
         TASKLEISTE.add(inventorybutton);
         inventorybutton.setFocusable(false);
         inventorybutton.addActionListener(_ -> {
             if (!Inventory.leagues.isEmpty()) inventorywindow();
+        });
+        JButton newSeasonButton = new JButton("New Season");
+        TASKLEISTE.add(newSeasonButton);
+        newSeasonButton.setFocusable(false);
+        newSeasonButton.addActionListener(_ -> {
+            int countCompletedLeagues = 0;
+             for (League l : Inventory.leagues){
+                 if (l.getTeams().size()*2-1==l.getCountMatchday()) countCompletedLeagues++;
+             }
+             if (Inventory.leagues.size()==countCompletedLeagues){
+                 Inventory.newSeason();
+             }
+             else{
+                 JLabel label = new JLabel("Alle Ligen müssen zuerst simuliert werden!");
+                 TASKLEISTE.remove(label);
+                 TASKLEISTE.add(label);
+             }
         });
         JButton exitButton = new JButton("Exit");
         TASKLEISTE.add(exitButton);
@@ -196,7 +154,7 @@ public class MW {
             setEloContent.add(setElo);
             setPromotionRelegationContent.add(labelForSetPromotion);
             setPromotionRelegationContent.add(setPromotion);
-            setPromotionRelegationContent.setVisible(Inventory.tier != 0);
+            setPromotionRelegationContent.setVisible(false);
             exitPanel.add(exit);
             Contentbroswer.add(exitPanel);
             displayTierPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -238,6 +196,7 @@ public class MW {
                     averageRating.setText("");
                     setElo.setText("");
                     setPromotion.setText("");
+                    setPromotionRelegationContent.setVisible(true);
                 }
             });
 
@@ -277,11 +236,9 @@ public class MW {
         leaguePanel.add(topPanel, BorderLayout.NORTH);
         leaguePanel.add(bottomPanel, BorderLayout.SOUTH);
         leagueWindow.add(leaguePanel);
-        DefaultTableModel constructTable = Inventory.constructTable(l);
+        DefaultTableModel constructTable = l.constructTable();
         JTable table = new JTable(constructTable);
-        JPanel resultsPanel = new JPanel();
-        resultsPanel.setLayout(new BoxLayout(resultsPanel,BoxLayout.Y_AXIS));
-        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,resultsPanel,table);
+        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(l.getResultsPanel()),table);
         centerPanel.setDividerLocation(1200/2);
         leaguePanel.add(centerPanel, BorderLayout.CENTER);
         leagueWindow.setVisible(true);
@@ -289,17 +246,38 @@ public class MW {
         simulateMatchday.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (l.getCountMatchday() < l.getTeams().size()-1) {
-                    ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday());
+                if (l.getCountMatchday() <= l.getTeams().size()*2-2) {
+                    ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday()-1);
                     for (Match m : getMatches) {
                         m.startMatch();
-                        resultsPanel.add(m.getMatchResultsPanel());
-                        resultsPanel.add(Box.createVerticalStrut(15));
+                        l.getResultsPanel().add(m.getMatchResultsPanel());
+                        l.getResultsPanel().add(Box.createVerticalStrut(15));
                     }
                     l.setCountMatchday(l.getCountMatchday() + 1);
-                    DefaultTableModel constructTable = Inventory.constructTable(l);
+                    DefaultTableModel constructTable = l.constructTable();
                     centerPanel.removeAll();
-                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, resultsPanel, table.add(new JTable(constructTable))));
+                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable))));
+                }
+            }
+        });
+
+        simulateAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                while (true) {
+                    if (l.getCountMatchday() <= l.getTeams().size() * 2 - 2) {
+                        ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday()-1);
+                        for (Match m : getMatches) {
+                            m.startMatch();
+                            l.getResultsPanel().add(m.getMatchResultsPanel());
+                            l.getResultsPanel().add(Box.createVerticalStrut(15));
+                        }
+                        DefaultTableModel constructTable = l.constructTable();
+                        centerPanel.removeAll();
+                        centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable))));
+                        l.setCountMatchday(l.getCountMatchday() + 1);
+                    }
+                    else break;
                 }
             }
         });
@@ -322,16 +300,15 @@ public class MW {
 
         JPanel Teamlist = new JPanel();
         Teamlist.setLayout(new BoxLayout(Teamlist, BoxLayout.Y_AXIS));
-
-
-        for (int i = 0; i < Inventory.leagues.get(i).getTeams().size(); i++) {
-            Teamlist.add(new JButton(Inventory.leagues.get(i).getTeams().get(i).name));
-
-            for (int j = 0; j < Inventory.leagues.get(i).getTeams().get(i).players.size(); j++) {
-                Teamlist.add(new JPanel().add(new JLabel(Inventory.leagues.get(i).getTeams().get(i).players.get(j).getName())));
+        for (League l : Inventory.leagues) {
+            for (Team t : l.getTeams()) {
+                if (!(t.getName().equals("Free"))) {
+                    Teamlist.add(new JButton(t.getName()));
+                    for (Spieler p : t.getPlayers()) {
+                        Teamlist.add(new JLabel(p.getName() + " " + p.getPosition() + " " + p.getRating()));
+                    }
+                }
             }
-
-
         }
         JScrollPane Scrollbox = new JScrollPane(Teamlist);
         invenwindow.add(Scrollbox);
