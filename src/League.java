@@ -1,4 +1,6 @@
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class League {
@@ -8,6 +10,9 @@ public class League {
     private int relegation;
     private ArrayList<Team> teams;
     private ArrayList<Team> champions;
+    private ArrayList<ArrayList<Match>> matchdays = new ArrayList<>();
+    private int countMatchday = 0;
+    private JPanel resultsPanel = new JPanel();
 
     public League(String name, int tier) {
         this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>());
@@ -67,30 +72,39 @@ public class League {
         return champions;
     }
 
-    public void showTable() {
-        ArrayList<Team> displayTable = new ArrayList<>(teams);
-        displayTable.sort((team1, team2) -> {
-            if (team2.points > team1.points) {
-                return 1;
-            }
-            if (team1.points == team2.points) {
-                if (team2.goalsTotal > team1.goalsTotal) {
-                    return 1;
-                } else if (team1.goalsTotal == team2.goalsTotal) {
-                    if (team2.goals > team1.goals) {
-                        return 1;
-                    } else return -1;
-                } else return -1;
-            } else return -1;
-        });
-        System.out.printf("%-7.5s %-20s %5s %5s %5s %5s %5s %5s %10s %10s \n","Place", "Team", "W", "D", "L", "GS", "GA", "GD", "P", "(ELO)");
-        System.out.println("-------------------------------------------------------------------------------------------------");
-        int place = 0;
-        for (Team team : displayTable) {
-            if (!team.name.equals("Free")) {
-                place++;
-                System.out.print(place+".");
-                Team.constructTable(team);
+    public ArrayList<ArrayList<Match>> getMatchdays() {
+        return matchdays;
+    }
+
+    public int getCountMatchday() {
+        return countMatchday;
+    }
+
+    public void setCountMatchday(int countMatchday) {
+        this.countMatchday = countMatchday;
+    }
+
+    public void makeMatchdayPlan() {
+        if (teams.size() % 2 != 0) {
+            teams.add(new Team("Free"));
+        }
+        int teamAmount = teams.size();
+        for (int round = 0; round < 2; round++) {
+            for (int matchday = 0; matchday < teamAmount - 1; matchday++) {
+                ArrayList<Match> matches = new ArrayList<>();
+                for (int j = 0; j < teamAmount / 2; j++) {
+                    Team team1 = teams.get(j);
+                    Team team2 = teams.get(teamAmount-1-j);
+                    if (!team1.name.equals("Free") && !team2.name.equals("Free")) {
+                        if (round == 0) {
+                            matches.add(new Match(team1, team2));
+                        } else {
+                            matches.add(new Match(team2, team1));
+                        }
+                    }
+                }
+                matchdays.add(matches);
+                Collections.rotate(teams.subList(1, teamAmount), 1);
             }
         }
     }

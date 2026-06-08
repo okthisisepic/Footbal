@@ -1,16 +1,19 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Match {
     private Team team1;
     private Team team2;
+    private JPanel matchResultsPanel = new JPanel();
 
     public Match(Team team1, Team team2){
         this.team1 = team1;
         this.team2 = team2;
-        prepareMatch();
     }
 
-    private void prepareMatch() {
+    public void startMatch() {
         List<Spieler> sortTeam1 = new ArrayList<>(team1.getPlayers());
         sortTeam1.sort(Comparator.comparingDouble(Spieler::getRating));
         List<Spieler> sortTeam2 = new ArrayList<>(team2.getPlayers());
@@ -19,8 +22,8 @@ public class Match {
         double teamStrength1 = team1.getElo() + (getStartingStrength(sortTeam1) * 15 * 0.25);
         double teamStrength2 = team2.getElo() + (getStartingStrength(sortTeam2) * 15 * 0.25);
 
-        double lambda1 = 15 + (teamStrength1 - teamStrength2) * 0.015;
-        double lambda2 = 15 + (teamStrength1 - teamStrength2) * 0.015;
+        double lambda1 = 10 + (teamStrength1 - teamStrength2) * 0.01;
+        double lambda2 = 10 + (teamStrength1 - teamStrength2) * 0.01;
 
         int expectedAttacksA = poissonRandom(lambda1);
         int expectedAttacksB = poissonRandom(lambda2);
@@ -72,6 +75,11 @@ public class Match {
         int goalsB = calculateAttacks(team2,team1,playersB,playersA,expectedAttacksB);
         team1.goalsTotal = team1.getGoals() - team1.getGoalsAgainst();
         team2.goalsTotal = team2.getGoals() - team2.getGoalsAgainst();
+        if (goalsA > goalsB){ team1.points+=3; team1.wins++; team2.losses++;}
+        if (goalsB > goalsA){ team2.points+=3; team2.wins++; team1.losses++;}
+        if (goalsA == goalsB){ team1.points++; team2.points++; team1.draws++; team2.draws++;}
+        team1.games++; team2.games++;
+        constructMatchPanel(goalsA,goalsB);
         updateElo(team1,team2, goalsA, goalsB);
     }
 
@@ -135,38 +143,38 @@ public class Match {
         for (int i = 0; i < goals; i++) {
             if (Math.random() < 0.75){
                 int select = (int) (Math.random()*3);
-                attackers.get(select).setRating(attackers.get(select).getRating()+0.3);
+                attackers.get(select).setRating(attackers.get(select).getRating()+0.2);
             }
             else {
                 int select = (int) (Math.random()*3);
-                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()+0.3);
+                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()+0.2);
             }
-            goalkeeper.setRating(goalkeeper.getRating()-0.25);
+            goalkeeper.setRating(goalkeeper.getRating()-0.15);
         }
 
             for (int i = 0; i < onTarget; i++) {
                 if (Math.random() < 0.75){
                     int select = (int) (Math.random()*3);
-                    attackers.get(select).setRating(attackers.get(select).getRating()+0.15);
+                    attackers.get(select).setRating(attackers.get(select).getRating()+0.1);
                     if (Math.random() < 0.75){
                         int select2 = (int) (Math.random()*4);
-                        defenders.get(select2).setRating(defenders.get(select2).getRating()-0.15);
+                        defenders.get(select2).setRating(defenders.get(select2).getRating()-0.1);
                     }
                     else {
                         int select2 = (int) (Math.random()*3);
-                        midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()-0.15);
+                        midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()-0.1);
                     }
                 }
                 else {
                     int select = (int) (Math.random()*3);
-                    midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()+0.15);
+                    midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()+0.1);
                     if (Math.random() < 0.75){
                         int select2 = (int) (Math.random()*4);
-                        defenders.get(select2).setRating(defenders.get(select2).getRating()-0.15);
+                        defenders.get(select2).setRating(defenders.get(select2).getRating()-0.1);
                     }
                     else {
                         int select2 = (int) (Math.random()*3);
-                        midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()-0.15);
+                        midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()-0.1);
                     }
                 }
 
@@ -175,41 +183,41 @@ public class Match {
         for (int i = 0; i < offTarget; i++) {
             if (Math.random() < 0.75){
                 int select = (int) (Math.random()*3);
-                attackers.get(select).setRating(attackers.get(select).getRating()-0.15);
+                attackers.get(select).setRating(attackers.get(select).getRating()-0.05);
             }
             else {
                 int select = (int) (Math.random()*3);
-                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()-0.15);
+                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()-0.05);
             }
         }
         // per blocked attack
         for (int i = 0; i < blocked; i++) {
             if (Math.random() < 0.75){
                 int select = (int) (Math.random()*3);
-                attackers.get(select).setRating(attackers.get(select).getRating()-0.1);
+                attackers.get(select).setRating(attackers.get(select).getRating()-0.05);
                 if (Math.random() < 0.75){
                     int select2 = (int) (Math.random()*4);
-                    defenders.get(select2).setRating(defenders.get(select2).getRating()+0.15);
+                    defenders.get(select2).setRating(defenders.get(select2).getRating()+0.1);
                 }
                 else {
                     int select2 = (int) (Math.random()*3);
-                    midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()+0.15);
+                    midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()+0.1);
                 }
             }
             else {
                 int select = (int) (Math.random()*3);
-                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()-0.15);
+                midfieldersA.get(select).setRating(midfieldersA.get(select).getRating()-0.05);
                 if (Math.random() < 0.75){
                     int select2 = (int) (Math.random()*4);
-                    defenders.get(select2).setRating(defenders.get(select2).getRating()+0.15);
+                    defenders.get(select2).setRating(defenders.get(select2).getRating()+0.1);
                 }
                 else {
                     int select2 = (int) (Math.random()*3);
-                    midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()+0.15);
+                    midfieldersB.get(select2).setRating(midfieldersA.get(select2).getRating()+0.1);
                 }
             }
         }
-        goalkeeper.setRating((onTarget-goals)*0.3);
+        goalkeeper.setRating((onTarget-goals)*0.2);
         attackingTeam.goals+=goals;
         defendingTeam.goalsAgainst+=goals;
         // replace players
@@ -251,7 +259,7 @@ public class Match {
 
         for (Spieler p : defendingTeam.getPlayers()) {
             for (int i = 0; i < defendingTeam.players.size(); i++) {
-                if (p.getPosition().equals(POSITION.GK)) defendingTeam.players.set(i,goalkeeper);
+                if (p.getPosition().equals(POSITION.GK)) defendingTeam.players.set(i,goalkeeper); break;
             }
         }
         System.out.println("Goals: "+goals);
@@ -294,5 +302,17 @@ public class Match {
             a.elo = eloA + k*(0.5f-chanceForA);
             b.elo = eloB + k*(0.5f-chanceForB);
         }
+
+
+    }
+
+    public void constructMatchPanel(int goalsA, int goalsB){
+        matchResultsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel label = new JLabel(team1.getName()+" "+goalsA+" - "+goalsB+" "+team2.getName());
+        matchResultsPanel.add(label);
+    }
+
+    public JPanel getMatchResultsPanel() {
+        return matchResultsPanel;
     }
 }

@@ -1,4 +1,5 @@
 
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,42 @@ public class Inventory {
         for (String name : names){
             leagues.get(tier).setTeam(new Team(name,elo,rating));
         }
+        leagues.get(tier).makeMatchdayPlan();
         System.out.println("Teams created!");
+    }
+    public static DefaultTableModel constructTable(League l){
+        DefaultTableModel table = new DefaultTableModel();
+        List<Team> teams = new ArrayList<>(l.getTeams());
+        teams.sort((team1, team2) -> {
+            if (team2.points > team1.points) {
+                return 1;
+            }
+            if (team1.points == team2.points) {
+                if (team2.goalsTotal > team1.goalsTotal) {
+                    return 1;
+                } else if (team1.goalsTotal == team2.goalsTotal) {
+                    if (team2.goals > team1.goals) {
+                        return 1;
+                    } else return -1;
+                } else return -1;
+            } else return -1;
+        });
+        table.addColumn("Pos");
+        table.addColumn("Team");
+        table.addColumn("MP");
+        table.addColumn("W");
+        table.addColumn("D");
+        table.addColumn("L");
+        table.addColumn("GS");
+        table.addColumn("GC");
+        table.addColumn("GD");
+        table.addColumn("P");
+        table.addRow(new Object[]{"Pos","Team","MP","W","D","L","GS","GC","GD","P"});
+        for (Team t : teams){
+            if (!(t.getName().equals("Free"))) {
+                table.addRow(new Object[]{1, t.getName(), t.getGames(), t.getWins(), t.getDraws(), t.getLosses(), t.getGoals(), t.getGoalsAgainst(), t.getGoalsTotal(), t.getPoints()});
+            }
+        }
+        return table;
     }
 }

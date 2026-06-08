@@ -27,7 +27,7 @@ public class TeamMain {
                             }
                         }
                         Collections.rotate(l.getTeams().subList(1, teamAmount), 1);
-                        l.showTable();
+                      //  l.showTable();
                     }
                 }
                 System.out.println();

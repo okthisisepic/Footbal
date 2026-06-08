@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class Team {
         String name;
@@ -118,8 +117,4 @@ public class Team {
     public float getElo() {
         return elo;
     }
-
-        public static void constructTable(Team team){
-            System.out.printf("%-5s %-20s %5d %5d %5d %5d %5d %5d %10d %15f\n","",team.name,team.wins,team.draws,team.losses,team.goals,team.goalsAgainst,team.goalsTotal,team.points,team.elo);
-        }
-    }
+ }

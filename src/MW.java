@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.Flow;
 
 // in this class not only is the ui stored here but also the inventory for direct access to the ui
 public class MW {
@@ -264,9 +261,9 @@ public class MW {
 
     public void buildWindowForLeague(League l){
         JFrame leagueWindow = new JFrame();
-        leagueWindow.setTitle("View League " + l.getName());
+        leagueWindow.setTitle("View League: " + l.getName());
         leagueWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        leagueWindow.setSize(700, 700);
+        leagueWindow.setSize(1200, 900);
         leagueWindow.setLocationRelativeTo(null);
         JPanel leaguePanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -280,45 +277,42 @@ public class MW {
         leaguePanel.add(topPanel, BorderLayout.NORTH);
         leaguePanel.add(bottomPanel, BorderLayout.SOUTH);
         leagueWindow.add(leaguePanel);
-        DefaultTableModel constructTable = constructTable(l);
+        DefaultTableModel constructTable = Inventory.constructTable(l);
         JTable table = new JTable(constructTable);
-        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,null,table);
+        JPanel resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel,BoxLayout.Y_AXIS));
+        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,resultsPanel,table);
+        centerPanel.setDividerLocation(1200/2);
         leaguePanel.add(centerPanel, BorderLayout.CENTER);
         leagueWindow.setVisible(true);
+
+        simulateMatchday.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (l.getCountMatchday() < l.getTeams().size()-1) {
+                    ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday());
+                    for (Match m : getMatches) {
+                        m.startMatch();
+                        resultsPanel.add(m.getMatchResultsPanel());
+                        resultsPanel.add(Box.createVerticalStrut(15));
+                    }
+                    l.setCountMatchday(l.getCountMatchday() + 1);
+                    DefaultTableModel constructTable = Inventory.constructTable(l);
+                    centerPanel.removeAll();
+                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, resultsPanel, table.add(new JTable(constructTable))));
+                }
+            }
+        });
+
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                leagueWindow.dispose();
+            }
+        });
     }
 
-    public DefaultTableModel constructTable(League l){
-        DefaultTableModel table = new DefaultTableModel();
-        List<Team> teams = new ArrayList<>(l.getTeams());
-        teams.sort((team1, team2) -> {
-            if (team2.points > team1.points) {
-                return 1;
-            }
-            if (team1.points == team2.points) {
-                if (team2.goalsTotal > team1.goalsTotal) {
-                    return 1;
-                } else if (team1.goalsTotal == team2.goalsTotal) {
-                    if (team2.goals > team1.goals) {
-                        return 1;
-                    } else return -1;
-                } else return -1;
-            } else return -1;
-        });
-        table.addColumn("Pos");
-        table.addColumn("Team");
-        table.addColumn("MP");
-        table.addColumn("W");
-        table.addColumn("D");
-        table.addColumn("L");
-        table.addColumn("GS");
-        table.addColumn("GC");
-        table.addColumn("GD");
-        table.addColumn("P");
-        for (Team t : teams){
-            table.addRow(new Object[]{1,t.getName(),t.getGames(),t.getWins(),t.getDraws(),t.getLosses(),t.getGoals(),t.getGoalsAgainst(),t.getGoalsTotal(),t.getPoints()});
-        }
-        return table;
-    }
+
     public void inventorywindow() {
         JFrame invenwindow = new JFrame();
         invenwindow.setSize(700, 700);
