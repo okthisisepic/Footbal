@@ -134,6 +134,7 @@ public class League {
     }
 
     public void makeMatchdayPlan() {
+        matchdays.clear();
         if (teams.size() % 2 != 0) {
             teams.add(new Team("Free"));
         }

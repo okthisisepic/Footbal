@@ -105,6 +105,7 @@ public class Inventory {
             }
             l.setCountMatchday(1);
             l.clearPanel();
+            l.makeMatchdayPlan();
         }
     }
 }
