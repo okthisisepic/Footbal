@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.Objects;
 
 enum POSITION{ATT, MID, DEF, GK}
+enum STATUS{}
 
 public class Spieler {
     private String name = "";
     private double price;
     private double rating;
     private POSITION position;
+    private int yellowCards = 0;
+    private boolean gotYellowInMatch = false;
+    private int daysSuspended = 0;
+    int daysInjured = 0;
+
 
     public Spieler(double rating) {
         generatePlayer(rating);
@@ -68,6 +74,38 @@ public class Spieler {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getYellowCards() {
+        return yellowCards;
+    }
+
+    public void setYellowCards(int yellowCards) {
+        this.yellowCards = yellowCards;
+    }
+
+    public int getDaysSuspended() {
+        return daysSuspended;
+    }
+
+    public void setDaysSuspended(int daysSuspended) {
+        this.daysSuspended = daysSuspended;
+    }
+
+    public int getDaysInjured() {
+        return daysInjured;
+    }
+
+    public void setDaysInjured(int daysInjured) {
+        this.daysInjured = daysInjured;
+    }
+
+    public boolean isGotYellowInMatch() {
+        return gotYellowInMatch;
+    }
+
+    public void setGotYellowInMatch(boolean gotYellowInMatch) {
+        this.gotYellowInMatch = gotYellowInMatch;
     }
 
     public void teststats() {
