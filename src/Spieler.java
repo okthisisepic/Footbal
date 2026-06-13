@@ -12,6 +12,7 @@ public class Spieler {
     private double rating;
     private POSITION position;
     private int yellowCards = 0;
+    private int redCards = 0;
     private boolean gotYellowInMatch = false;
     private int daysSuspended = 0;
     int daysInjured = 0;
@@ -106,6 +107,14 @@ public class Spieler {
 
     public void setGotYellowInMatch(boolean gotYellowInMatch) {
         this.gotYellowInMatch = gotYellowInMatch;
+    }
+
+    public int getRedCards() {
+        return redCards;
+    }
+
+    public void setRedCards(int redCards) {
+        this.redCards = redCards;
     }
 
     public void teststats() {
