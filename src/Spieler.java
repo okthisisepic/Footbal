@@ -8,7 +8,6 @@ enum STATUS{}
 
 public class Spieler {
     private String name = "";
-    private double price;
     private double rating;
     private POSITION position;
     private int yellowCards = 0;
@@ -29,7 +28,6 @@ public class Spieler {
             //Name generieren
             name += names[(int) (Math.random()* names.length)];
             name += names[(int) (Math.random()* names.length)];
-            price = Math.nextUp(Math.random()*100000);
             int decidePosition = (int) (Math.random()*11);
             this.rating = (int) ((Math.random() * 30) - 15 + rating);
             if (decidePosition == 10){
@@ -53,10 +51,6 @@ public class Spieler {
         return name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
     public double getRating() {
         return rating;
     }
@@ -65,8 +59,8 @@ public class Spieler {
         return position;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPosition(POSITION position) {
+        this.position = position;
     }
 
     public void setRating(double rating) {
@@ -115,10 +109,6 @@ public class Spieler {
 
     public void setRedCards(int redCards) {
         this.redCards = redCards;
-    }
-
-    public void teststats() {
-        System.out.println("Name: "+getName()+" price: "+getPrice()+"$ rating: "+getRating()+" position: "+getPosition());
     }
 
     @Override

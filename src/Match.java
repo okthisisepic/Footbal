@@ -116,7 +116,7 @@ public class Match {
         int blocked = 0;
         Spieler goalkeeper = new Spieler(50);
         for (int i = 0; i < expectedAttacks; i++) {
-            int min = (int)((i + Math.random()) * 90.0 / expectedAttacks);
+            int min = (int)((i+1 + Math.random()) * 90.0 / expectedAttacks);
             double attackQuality = attackStrength / (attackStrength + defenseStrength); //quality between 0 and 1
             if (Math.random() < attackQuality) {
                 if (Math.random() < 0.3 + attackQuality * 0.4) {
@@ -207,16 +207,17 @@ public class Match {
                 else if (Math.random() < 0.09){
                     int random = (int) (Math.random()*startPlayersDefendingSide.size());
                     Spieler p = startPlayersDefendingSide.get(random);
-                    eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Yellow Card");
+
                     p.setYellowCards(p.getYellowCards()+1);
                     if (p.isGotYellowInMatch()){
                         p.setDaysSuspended(2);
+                        eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Yellow-Red Card");
                         for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
                             if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
                         }
                         startPlayersDefendingSide = getStartingEleven(defendingTeam);
                     }
-                    else p.setGotYellowInMatch(true);
+                    else{ eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Yellow Card"); p.setGotYellowInMatch(true);}
                 }
 
                 // per blocked attack

@@ -1,9 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 // in this class not only is the ui stored here but also the inventory for direct access to the ui
 public class MW {
@@ -91,7 +90,7 @@ public class MW {
         TASKLEISTE.add(inventorybutton);
         inventorybutton.setFocusable(false);
         inventorybutton.addActionListener(_ -> {
-            if (!Inventory.leagues.isEmpty()) inventorywindow();
+            if (!Inventory.leagues.isEmpty()) inventoryWindow();
         });
         JButton newSeasonButton = new JButton("New Season");
         TASKLEISTE.add(newSeasonButton);
@@ -139,7 +138,7 @@ public class MW {
             JTextField averageRating = new JTextField(20);
             JLabel labelForSetElo = new JLabel("Set ELO-Rating (default 500)");
             JTextField setElo = new JTextField(20);
-            JLabel labelForSetPromotion = new JLabel("Set number of teams to promote to next upper tier");
+            JLabel labelForSetPromotion = new JLabel("Set number of teams to promote to next upper tier (default 0)");
             JTextField setPromotion = new JTextField(20);
             JPanel exitPanel = new JPanel();
             JButton exit = new JButton("Exit");
@@ -154,7 +153,7 @@ public class MW {
             setEloContent.add(setElo);
             setPromotionRelegationContent.add(labelForSetPromotion);
             setPromotionRelegationContent.add(setPromotion);
-            setPromotionRelegationContent.setVisible(false);
+            if (Inventory.tier == 0)setPromotionRelegationContent.setVisible(false);
             exitPanel.add(exit);
             Contentbroswer.add(exitPanel);
             displayTierPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -173,7 +172,6 @@ public class MW {
             mainPanel.add(mainContent);
             window.add(mainPanel, BorderLayout.CENTER);
             JButton createbutton = new JButton("Create League");
-            JTextField name = new JTextField(10); //10 ist die längedes felds
             JLabel nameofleague = new JLabel("Inventory.league.name");
             nameofleague.setForeground(Color.blue);
             Contentbroswer.add(createbutton);
@@ -182,21 +180,30 @@ public class MW {
             window.add(Contentbroswer, BorderLayout.NORTH); //CENTER = Ganzer screen lol NORTH ist oben custimize ts wie du willst SOUTH ist so taskleiste was urrrr geilo ausieht
             Contentbroswer.setBackground(Color.RED);
             createbutton.addActionListener(_ -> {
-                if (!leagueName.getText().isBlank() && !inputTeams.getText().isBlank()) {
-                    String[] teamNames = inputTeams.getText().split(",");
-                    if (setPromotion.getText().isBlank()) setPromotion.setText("0");
-                    if (setElo.getText().isBlank()) setElo.setText("500");
-                    if (averageRating.getText().isBlank()) averageRating.setText("50");
-                    Inventory.createLeague(leagueName.getText(), Integer.parseInt(setPromotion.getText()));
-                    Inventory.makeTeams(teamNames, Float.parseFloat(setElo.getText()), Double.parseDouble(averageRating.getText()));
-                    Inventory.tier++;
-                    displayTier.setText("Tier: "+Inventory.tier);
-                    leagueName.setText("");
-                    inputTeams.setText("");
-                    averageRating.setText("");
-                    setElo.setText("");
-                    setPromotion.setText("");
-                    setPromotionRelegationContent.setVisible(true);
+                try {
+                    int countLeagues = 0;
+                    for (League l : Inventory.leagues) {
+                        if (Integer.parseInt(setPromotion.getText()) <= l.getTeams().size()) countLeagues++;
+                    }
+                    if (!leagueName.getText().isBlank() && !inputTeams.getText().isBlank() && countLeagues == Inventory.leagues.size()) {
+                        String[] teamNames = inputTeams.getText().split(",");
+                        if (setPromotion.getText().isBlank()) setPromotion.setText("0");
+                        if (setElo.getText().isBlank()) setElo.setText("500");
+                        if (averageRating.getText().isBlank()) averageRating.setText("50");
+                        Inventory.createLeague(leagueName.getText(), Integer.parseInt(setPromotion.getText()));
+                        Inventory.makeTeams(teamNames, Float.parseFloat(setElo.getText()), Double.parseDouble(averageRating.getText()));
+                        Inventory.tier++;
+                        displayTier.setText("Tier: " + Inventory.tier);
+                        leagueName.setText("");
+                        inputTeams.setText("");
+                        averageRating.setText("");
+                        setElo.setText("");
+                        setPromotion.setText("");
+                        setPromotionRelegationContent.setVisible(true);
+                    }
+                    else mainContent.add(new JLabel("League name and teams list shouldn`t be blank, promotions above one of the league sizes is also not permitted!"));
+                } catch (Exception e){
+                    mainContent.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
                 }
             });
 
@@ -238,82 +245,186 @@ public class MW {
         leagueWindow.add(leaguePanel);
         DefaultTableModel constructTable = l.constructTable();
         JTable table = new JTable(constructTable);
-        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(l.getResultsPanel()),table);
+        JScrollPane resultsPanel = new JScrollPane(l.getResultsPanel());
+        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,resultsPanel,table);
         centerPanel.setDividerLocation(1200/2);
         leaguePanel.add(centerPanel, BorderLayout.CENTER);
         leagueWindow.setVisible(true);
 
-        simulateMatchday.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (l.getCountMatchday() <= l.getTeams().size()*2-2) {
+        simulateMatchday.addActionListener(_ -> {
+            if (l.getCountMatchday() <= l.getTeams().size()*2-2) {
+                ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday()-1);
+                for (Match m : getMatches) {
+                    m.startMatch();
+                    l.getResultsPanel().add(m.getMatchResultsPanel());
+                    l.getResultsPanel().add(Box.createVerticalStrut(15));
+                }
+                l.setCountMatchday(l.getCountMatchday() + 1);
+                DefaultTableModel constructTable1 = l.constructTable();
+                centerPanel.removeAll();
+                centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable1))));
+            }
+        });
+
+        simulateAll.addActionListener(_ -> {
+            while (true) {
+                if (l.getCountMatchday() <= l.getTeams().size() * 2 - 2) {
                     ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday()-1);
                     for (Match m : getMatches) {
                         m.startMatch();
                         l.getResultsPanel().add(m.getMatchResultsPanel());
                         l.getResultsPanel().add(Box.createVerticalStrut(15));
                     }
-                    l.setCountMatchday(l.getCountMatchday() + 1);
-                    DefaultTableModel constructTable = l.constructTable();
+                    DefaultTableModel constructTable2 = l.constructTable();
                     centerPanel.removeAll();
-                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable))));
+                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable2))));
+                    l.setCountMatchday(l.getCountMatchday() + 1);
                 }
+                else break;
             }
         });
 
-        simulateAll.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                while (true) {
-                    if (l.getCountMatchday() <= l.getTeams().size() * 2 - 2) {
-                        ArrayList<Match> getMatches = l.getMatchdays().get(l.getCountMatchday()-1);
-                        for (Match m : getMatches) {
-                            m.startMatch();
-                            l.getResultsPanel().add(m.getMatchResultsPanel());
-                            l.getResultsPanel().add(Box.createVerticalStrut(15));
-                        }
-                        DefaultTableModel constructTable = l.constructTable();
-                        centerPanel.removeAll();
-                        centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable))));
-                        l.setCountMatchday(l.getCountMatchday() + 1);
-                    }
-                    else break;
-                }
-            }
-        });
-
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                leagueWindow.dispose();
-            }
-        });
+        close.addActionListener(_ -> leagueWindow.dispose());
     }
 
 
-    public void inventorywindow() {
+    public void inventoryWindow() {
         JFrame invenwindow = new JFrame();
         invenwindow.setSize(700, 700);
         invenwindow.setTitle("Inventory");
         invenwindow.setVisible(true);
 
-
-        JPanel Teamlist = new JPanel();
-        Teamlist.setLayout(new BoxLayout(Teamlist, BoxLayout.Y_AXIS));
+        JPanel editList = new JPanel();
+        editList.setLayout(new BoxLayout(editList, BoxLayout.Y_AXIS));
         for (League l : Inventory.leagues) {
+            JButton lButton = new JButton(l.getName());
+            lButton.setFont(new Font("Arial", Font.PLAIN, 17));
+            editList.add(lButton);
+            editList.add(new JLabel("- - - - - - - - - - "));
+            lButton.addActionListener(_ -> inventoryEvent(l));
             for (Team t : l.getTeams()) {
                 if (!(t.getName().equals("Free"))) {
-                    Teamlist.add(new JButton(t.getName()));
+                    JButton tButton = new JButton(t.getName());
+                    tButton.setFont(new Font("Arial", Font.PLAIN, 14));
+                    editList.add(tButton);
+                    editList.add(new JLabel("- - - - - - - - - - "));
+                    tButton.addActionListener(_ -> inventoryEvent(t));
                     for (Spieler p : t.getPlayers()) {
-                        Teamlist.add(new JLabel(p.getName() + " " + p.getPosition() + " " + p.getRating()));
+                        JButton pButton = new JButton(p.getName() + " " + p.getPosition() + " " + p.getRating());
+                        pButton.setFont(new Font("Arial", Font.PLAIN, 10));
+                        editList.add(pButton);
+                        editList.add(new JLabel("- - - - - - -"));
+                        pButton.addActionListener(_ -> inventoryEvent(p));
                     }
                 }
             }
         }
-        JScrollPane Scrollbox = new JScrollPane(Teamlist);
+        JScrollPane Scrollbox = new JScrollPane(editList);
         invenwindow.add(Scrollbox);
-
-        Teamlist.setBackground(Color.green);
+        editList.setBackground(Color.green);
     }
 
+    private void inventoryEvent(Object o) {
+        JFrame editWindow = new JFrame();
+        editWindow.setSize(400, 400);
+        JPanel editPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        editPanel.setLayout(new BoxLayout(editPanel, BoxLayout.Y_AXIS));
+        editWindow.setTitle("Edit Window");
+        editWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        editWindow.setLocationRelativeTo(null);
+        editWindow.setVisible(true);
+        if (o instanceof League) {
+            JLabel labelName = new JLabel("Name:");
+            JTextField textName = new JTextField(20);
+            textName.setText(((League) o).getName());
+            JPanel panelName = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelName.add(labelName);
+            panelName.add(textName);
+            editPanel.add(panelName);
+            JTextField textPromotion = new JTextField(20);
+            if (((League) o).getTier() != 0) {
+                JLabel labelPromotion = new JLabel("Promotion:");
+                textPromotion.setText(((League) o).getPromotion()+"");
+                JPanel panelPromotion = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                panelPromotion.add(labelPromotion);
+                panelPromotion.add(textPromotion);
+                editPanel.add(panelPromotion);
+            }
+            else textPromotion.setText(((League) o).getPromotion()+"");
+            JButton editButton = new JButton("Apply Edit");
+            editPanel.add(editButton);
+            editButton.addActionListener(_ -> {
+                ((League) o).setName(textName.getText());
+                ((League) o).setPromotion(Integer.parseInt(textPromotion.getText()));
+                if(((League) o).getTier()!=0)Inventory.leagues.get(((League) o).getTier()-1).setRelegation(Integer.parseInt(textPromotion.getText()));
+            });
+        }
+        if (o instanceof Team) {
+            JLabel labelName = new JLabel("Name:");
+            JTextField textName = new JTextField(20);
+            textName.setText(((Team) o).getName());
+            JPanel panelName = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelName.add(labelName);
+            panelName.add(textName);
+            JLabel labelElo = new JLabel("ELO");
+            JTextField textElo = new JTextField(20);
+            textElo.setText(((Team) o).getElo() + "");
+            JPanel panelElo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelElo.add(labelElo);
+            panelElo.add(textElo);
+            editPanel.add(panelName);
+            editPanel.add(panelElo);
+            JButton editButton = new JButton("Apply Edit");
+            editPanel.add(editButton);
+            editButton.addActionListener(_ -> {
+                ((Team) o).name = textName.getText();
+                ((Team) o).elo = Float.parseFloat(textElo.getText());
+            });
+        }
+        if (o instanceof Spieler) {
+            JLabel labelName = new JLabel("Name:");
+            JTextField textName = new JTextField(20);
+            textName.setText(((Spieler) o).getName());
+            JPanel panelName = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelName.add(labelName);
+            panelName.add(textName);
+            JLabel labelRating = new JLabel("Rating:");
+            JTextField textRating = new JTextField(20);
+            textRating.setText(((Spieler) o).getRating() + "");
+            JPanel panelRating = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelRating.add(labelRating);
+            panelRating.add(textRating);
+            JButton buttonATT = new JButton("ATT");
+            JButton buttonMID = new JButton("MID");
+            JButton buttonDEF = new JButton("DEF");
+            JButton buttonGK = new JButton("GK");
+            JLabel positionLabel = new JLabel(((Spieler) o).getPosition() + "");
+            JPanel panelPosition = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            panelPosition.add(buttonATT);
+            panelPosition.add(buttonMID);
+            panelPosition.add(buttonDEF);
+            panelPosition.add(buttonGK);
+            panelPosition.add(positionLabel);
+            editPanel.add(panelName);
+            editPanel.add(panelRating);
+            editPanel.add(panelPosition);
+
+            buttonATT.addActionListener(_ -> positionLabel.setText("ATT"));
+            buttonMID.addActionListener(_ -> positionLabel.setText("MID"));
+            buttonDEF.addActionListener(_ -> positionLabel.setText("DEF"));
+            buttonGK.addActionListener(_ -> positionLabel.setText("GK"));
+
+            JButton editButton = new JButton("Apply Edit");
+            editPanel.add(editButton);
+            editButton.addActionListener(_ -> {
+                ((Spieler) o).setName(textName.getText());
+                ((Spieler) o).setRating(Integer.parseInt(textRating.getText()));
+                if (positionLabel.getText().equals("ATT")) ((Spieler) o).setPosition(POSITION.ATT);
+                if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
+                if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
+                if (positionLabel.getText().equals("GK")) ((Spieler) o).setPosition(POSITION.GK);
+            });
+        }
+        editWindow.add(editPanel);
+    }
 }
