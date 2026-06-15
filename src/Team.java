@@ -45,18 +45,18 @@ public class Team {
 
     /**
      * Constructs a team with all params possible
-     * @param name
-     * @param games
-     * @param wins
-     * @param draws
-     * @param losses
-     * @param goals
-     * @param goalsAgainst
-     * @param goalsTotal
-     * @param points
-     * @param championships
-     * @param elo
-     * @param rating
+     * @param name name
+     * @param games games
+     * @param wins wins
+     * @param draws draws
+     * @param losses losses
+     * @param goals goals
+     * @param goalsAgainst goalsAgainst
+     * @param goalsTotal goalsTotal
+     * @param points points
+     * @param championships championships
+     * @param elo elo
+     * @param rating rating
      */
         public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo,double rating){
             this.name = name;
@@ -151,26 +151,5 @@ public class Team {
 
     public float getElo() {
         return elo;
-    }
-    public String ALLPLAYERS() {
-            String retString = "";
-        for (int i = 0; i < players.size(); i++) {
-            retString+= " ";
-            retString+= players.get(i).getName();
-            retString+= " ";
-            retString+= players.get(i).getPosition();
-            retString+= " ";
-            retString+= players.get(i).getRating();
-            retString+= " ";
-            retString+= players.get(i).getDaysInjured();
-            retString+= " ";
-            retString+= players.get(i).getRedCards();
-            retString+= " ";
-            retString+= players.get(i).getDaysSuspended();
-            retString+= " ";
-            retString+= players.get(i).getYellowCards();
-
-        }
-            return retString;
     }
  }

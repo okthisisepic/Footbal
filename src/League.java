@@ -18,8 +18,8 @@ public class League {
 
     /**
      * Makes a League with only a name and tier
-     * @param name
-     * @param tier
+     * @param name name
+     * @param tier tier
      */
     public League(String name, int tier) {
         this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>());
@@ -27,9 +27,9 @@ public class League {
 
     /**
      * Makes a league with a name, tier and how many teams are able to promote
-     * @param name
-     * @param tier
-     * @param promotion
+     * @param name name
+     * @param tier tier
+     * @param promotion promotion
      */
     public League(String name, int tier, int promotion) {
         this(name, tier, promotion, 0, new ArrayList<>(), new ArrayList<>());
@@ -37,12 +37,12 @@ public class League {
 
     /**
      * Makes a league with all possible params
-     * @param name
-     * @param tier
-     * @param promotion
-     * @param relegation
-     * @param teams
-     * @param champions
+     * @param name name
+     * @param tier tier
+     * @param promotion promotion
+     * @param relegation relegation
+     * @param teams teams
+     * @param champions champions
      */
     public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions) {
         this.name = name;
@@ -184,37 +184,6 @@ public class League {
                 resultsPanel.setLayout(new BoxLayout(resultsPanel,BoxLayout.Y_AXIS));
             }
         }
-    }
-    public String outputallteams() {
-        String retString = "";
-        for (int i = 0; i < teams.size(); i++) {
-            retString +=teams.get(i).getName();
-            retString+= " ";
-            retString +=teams.get(i).getBudget();
-            retString+= " ";
-            retString +=teams.get(i).getChampionships();
-            retString+= " ";
-            retString +=teams.get(i).getElo();
-            retString+= " ";
-            retString +=teams.get(i).getDraws();
-            retString+= " ";
-            retString +=teams.get(i).getGames();
-            retString+= " ";
-            retString +=teams.get(i).getGoals();
-            retString+= " ";
-            retString +=teams.get(i).getGoalsAgainst();
-            retString+= " ";
-            retString +=teams.get(i).getGoalsTotal();
-            retString+= " ";
-            retString +=teams.get(i).getLosses();
-            retString+= " ";
-            retString +=teams.get(i).getPoints();
-            retString+= " ";
-            retString +=teams.get(i).getWins();
-            retString+= " ";
-            retString +=teams.get(i).ALLPLAYERS();
-        }
-        return retString;
     }
 }
 

@@ -7,6 +7,11 @@ public class Inventory {
     public static ArrayList<League> leagues = new ArrayList<>();
     public static int tier = 0;
 
+    /**
+     * Creates a league
+     * @param name League name
+     * @param promotion Number of teams that are able to promote
+     */
     public static void createLeague(String name, int promotion) {
         if (tier == 0) leagues.add(new League(name,tier));
         else {
@@ -15,6 +20,13 @@ public class Inventory {
         }
         System.out.println("League created!");
     }
+
+    /**
+     * Makes teams for a league based on tier
+     * @param names list of names
+     * @param elo elo-rating for all teams
+     * @param rating avg rating for players in a teeam
+     */
     public static void makeTeams(String[] names, float elo, double rating) {
         for (String name : names){
             leagues.get(tier).setTeam(new Team(name,elo,rating));
@@ -23,6 +35,9 @@ public class Inventory {
         System.out.println("Teams created!");
     }
 
+    /**
+     * Starts a new season by relegating/promoting teams, reseting tables and matchdays
+     */
     public static void newSeason(){
         for (League l : leagues) {
             l.getTeams().sort((team1, team2) -> {

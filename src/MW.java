@@ -90,7 +90,7 @@ public class MW {
     }
 
     /**
-     * Creates the viewwindow
+     * Creates the viewWindow
      */
     public void runViewWindow(){
         viewWindow = new JFrame();
@@ -264,7 +264,7 @@ public class MW {
     }
 
     /**
-     * This makes the window where all the playing of the teams happen including the table and math results
+     * This makes the window where all the playing of the teams happen including the table and match results
      * @param l League to play wiht
      */
     public void buildWindowForLeague(League l){
@@ -309,8 +309,6 @@ public class MW {
                 l.getResultsPanel().add(new JLabel("Please start a new Season"));
                 joitstimetostopmate();
             }
-
-
         });
 
         simulateAll.addActionListener(_ -> {
