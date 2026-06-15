@@ -1,19 +1,13 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 // in this class not only is the ui stored here but also the inventory for direct access to the ui
 public class MW {
     private JFrame viewWindow;
     private JFrame window;
-    private String SaveContent = "";
-    private String load  ="";
 
     public MW() throws InterruptedException {
         System.out.println("B A L L S");
@@ -32,12 +26,11 @@ public class MW {
         JLabel startLabel = new JLabel("Football simulator");
         JButton createLeagues = new JButton("Create Leagues");
         JButton viewLeagues = new JButton("View Leagues");
-        JButton lazy = new JButton("Create Generic League");
+        JButton lazy = new JButton("im lazy");
 
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lazy.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Elemente hinzufügen
         content.add(startLabel);
@@ -45,9 +38,8 @@ public class MW {
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
         content.add(viewLeagues);
-        content.add(Box.createVerticalStrut(20));
-        content.add(lazy);
         content.add(Box.createVerticalStrut(10));
+        content.add(lazy);
 
 
 
@@ -126,38 +118,6 @@ public class MW {
                  TASKLEISTE.remove(label);
                  TASKLEISTE.add(label);
              }
-        });
-        JButton Savebutton = new JButton("Save to file!");
-        TASKLEISTE.add(Savebutton);
-        Savebutton.setFocusable(false);
-
-        Savebutton.addActionListener(_ -> {
-            try {
-                System.out.println("Saved!");
-                Files.createFile(Path.of("Ball.saved"));
-
-                for (int i = 0; i < Inventory.leagues.size(); i++) {
-                    SaveContent += Inventory.leagues.get(i).getName();
-                    SaveContent += " ";
-                    SaveContent += Inventory.leagues.get(i).getTier();
-                    SaveContent += " ";
-                    SaveContent += Inventory.leagues.get(i).getPromotion();
-                    SaveContent += " ";
-                    SaveContent += Inventory.leagues.get(i).getRelegation();
-                    SaveContent += " ";
-                    SaveContent += Inventory.leagues.get(i).outputallteams();
-                }
-                Files.writeString(Path.of("Ball.saved"), SaveContent);
-                System.out.println(SaveContent);
-
-            } catch (IOException e) {
-                System.out.println("Saved!");
-            }
-            try {
-                Files.writeString(Path.of("Ball.saved"), SaveContent);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
         JButton exitButton = new JButton("Exit");
         TASKLEISTE.add(exitButton);
