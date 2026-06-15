@@ -121,4 +121,25 @@ public class Team {
     public float getElo() {
         return elo;
     }
+    public String ALLPLAYERS() {
+            String retString = "";
+        for (int i = 0; i < players.size(); i++) {
+            retString+= " ";
+            retString+= players.get(i).getName();
+            retString+= " ";
+            retString+= players.get(i).getPosition();
+            retString+= " ";
+            retString+= players.get(i).getRating();
+            retString+= " ";
+            retString+= players.get(i).getDaysInjured();
+            retString+= " ";
+            retString+= players.get(i).getRedCards();
+            retString+= " ";
+            retString+= players.get(i).getDaysSuspended();
+            retString+= " ";
+            retString+= players.get(i).getYellowCards();
+
+        }
+            return retString;
+    }
  }

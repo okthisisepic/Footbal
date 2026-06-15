@@ -159,5 +159,36 @@ public class League {
             }
         }
     }
+    public String outputallteams() {
+        String retString = "";
+        for (int i = 0; i < teams.size(); i++) {
+            retString +=teams.get(i).getName();
+            retString+= " ";
+            retString +=teams.get(i).getBudget();
+            retString+= " ";
+            retString +=teams.get(i).getChampionships();
+            retString+= " ";
+            retString +=teams.get(i).getElo();
+            retString+= " ";
+            retString +=teams.get(i).getDraws();
+            retString+= " ";
+            retString +=teams.get(i).getGames();
+            retString+= " ";
+            retString +=teams.get(i).getGoals();
+            retString+= " ";
+            retString +=teams.get(i).getGoalsAgainst();
+            retString+= " ";
+            retString +=teams.get(i).getGoalsTotal();
+            retString+= " ";
+            retString +=teams.get(i).getLosses();
+            retString+= " ";
+            retString +=teams.get(i).getPoints();
+            retString+= " ";
+            retString +=teams.get(i).getWins();
+            retString+= " ";
+            retString +=teams.get(i).ALLPLAYERS();
+        }
+        return retString;
+    }
 }
 
