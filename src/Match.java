@@ -269,9 +269,9 @@ public class Match {
             //injury
             if (Math.random() < 0.005){
                 if (Math.random() > 0.15){ //attackingTeam
-                    startPlayersAttackingSide = injuryAttackingTeam(attackingTeam, startPlayersAttackingSide, min);
+                    startPlayersAttackingSide = updateTeamInjury(attackingTeam, startPlayersAttackingSide, min);
                 } else { // defendingTeam
-                    startPlayersDefendingSide = injuryDefendingTeam(defendingTeam, startPlayersDefendingSide, min);
+                    startPlayersDefendingSide = updateTeamInjury(defendingTeam, startPlayersDefendingSide, min);
                 }
             }
         }
@@ -291,41 +291,22 @@ public class Match {
     }
 
     /**
-     * Updates the starting eleven of the defending team, when an injury had been occurred.
-     * @param defendingTeam .
-     * @param startPlayersDefendingSide starting eleven
-     * @param min The minute when
-     * @return updated list of players
+     * Updates the starting eleven of a team after an injury was occurred.
+     * @param t Team
+     * @param startPlayers players starting
+     * @param min The minute the event occurs
+     * @return list of updated players
      */
-    private ArrayList<Spieler> injuryDefendingTeam(Team defendingTeam, ArrayList<Spieler> startPlayersDefendingSide, int min) {
-        int random = (int) (Math.random()* startPlayersDefendingSide.size());
-        Spieler p = startPlayersDefendingSide.get(random);
-        eventList.add(min +"' "+p.getName()+" ("+ defendingTeam.getName()+") Injury");
+    private ArrayList<Spieler> updateTeamInjury(Team t, ArrayList<Spieler> startPlayers, int min) {
+        int random = (int) (Math.random()* startPlayers.size());
+        Spieler p = startPlayers.get(random);
+        eventList.add(min +"' "+p.getName()+" ("+ t.getName()+") Injury");
         p.setDaysInjured((int) (Math.random()*9));
-        for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
-            if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
+        for (int j = 0; j < t.getPlayers().size(); j++) {
+            if (p.equals(t.getPlayers().get(random))) startPlayers.set(random,p);
         }
-        startPlayersDefendingSide = getStartingEleven(defendingTeam);
-        return startPlayersDefendingSide;
-    }
-
-    /**
-     * Updates the starting eleven of the attacking team, when an injury had been occurred.
-     * @param attackingTeam .
-     * @param startPlayersAttackingSide starting eleven
-     * @param min The minute when
-     * @return updated list of players
-     */
-    private ArrayList<Spieler> injuryAttackingTeam(Team attackingTeam, ArrayList<Spieler> startPlayersAttackingSide, int min) {
-        int random = (int) (Math.random()* startPlayersAttackingSide.size());
-        Spieler p = startPlayersAttackingSide.get(random);
-        eventList.add(min +"' "+p.getName()+" ("+ attackingTeam.getName()+") Injury");
-        p.setDaysInjured((int) (Math.random()*9));
-        for (int j = 0; j < attackingTeam.getPlayers().size(); j++) {
-            if (p.equals(attackingTeam.getPlayers().get(random))) startPlayersAttackingSide.set(random,p);
-        }
-        startPlayersAttackingSide = getStartingEleven(attackingTeam);
-        return startPlayersAttackingSide;
+        startPlayers = getStartingEleven(t);
+        return startPlayers;
     }
 
     /**
@@ -387,7 +368,12 @@ public class Match {
         }
     }
 
-
+    /**
+     * Updates a players rating by adding updateValue
+     * @param updateValue The value added to the player
+     * @param position postion of the player
+     * @param playerList list of starting players of a team
+     */
     private void updateRating(double updateValue,POSITION position,ArrayList<Spieler> playerList) {
         while (true){
             int random = (int) (Math.random()* playerList.size());
@@ -395,6 +381,11 @@ public class Match {
         }
     }
 
+    /**
+     * An algorithm that gets used to determine the amount of expected attacks a team can get
+     * @param lambda a given value to influence the algorithm
+     * @return exceptedAttacks
+     */
     private static int poissonRandom(double lambda) {
         double L = Math.exp(-lambda);
         double p = 1.0;
@@ -404,10 +395,16 @@ public class Match {
             k++;
             p *= Math.random();
         } while (p > L);
-
         return k - 1;
     }
 
+    /**
+     * Updates the power-rating(ELO Rating) of a team based on ELOs between teams and the match end result
+     * @param a
+     * @param b
+     * @param toreA
+     * @param toreB
+     */
     public static void updateElo(Team a, Team b, int toreA, int toreB){
         final int k = 32;
         float eloA = a.elo;
@@ -429,6 +426,9 @@ public class Match {
         }
     }
 
+    /**
+     * Sort match events by minute and adds them to a JPanel called matchResultsPanel
+     */
     private void constructPanel(){
         eventList.sort((o1, o2) -> {
         String s1 = "";

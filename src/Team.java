@@ -16,18 +16,48 @@ public class Team {
         int championships;
         float elo;
 
-        public Team(String name){
+    /**
+     * Constructs a Team class with a single name
+     * @param name name
+     */
+    public Team(String name){
             this(name,0,0,0,0,0,0,0,0,0,500,50);
         }
 
+    /**
+     * Constructs a Team class with a name and elo-rating
+     * @param name name
+     * @param elo elo-rating
+     */
         public Team(String name,float elo){
             this(name,0,0,0,0,0,0,0,0,0,elo,50);
         }
 
+    /**
+     * Constructs a Team class with a name, elo-rating and an average rating a player can have
+     * @param name name
+     * @param elo elo-rating
+     * @param rating avg player rating
+     */
         public Team(String name,float elo, double rating){
         this(name,0,0,0,0,0,0,0,0,0,elo,rating);
     }
 
+    /**
+     * Constructs a team with all params possible
+     * @param name
+     * @param games
+     * @param wins
+     * @param draws
+     * @param losses
+     * @param goals
+     * @param goalsAgainst
+     * @param goalsTotal
+     * @param points
+     * @param championships
+     * @param elo
+     * @param rating
+     */
         public Team(String name,int games,int wins,int draws,int losses,int goals,int goalsAgainst,int goalsTotal,int points,int championships,float elo,double rating){
             this.name = name;
             this.players = generatePlayerList(rating);
@@ -43,7 +73,12 @@ public class Team {
             this.elo = elo;
         }
 
-        public List<Spieler> generatePlayerList(double rating){
+    /**
+     * Generates players with an avg rating, then adds them in a list. Ensures that there aare at least 3 Attackers, 3 Midfielders, 4 Defenders and 1 Goalkeeper.
+     * @param rating
+     * @return
+     */
+    public List<Spieler> generatePlayerList(double rating){
             int countAttackers = 0;
             int countMidfielders = 0;
             int countDefenders = 0;

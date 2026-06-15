@@ -16,14 +16,34 @@ public class League {
     private int countMatchday = 1;
     private JPanel resultsPanel = new JPanel();
 
+    /**
+     * Makes a League with only a name and tier
+     * @param name
+     * @param tier
+     */
     public League(String name, int tier) {
         this(name, tier, 0, 0, new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Makes a league with a name, tier and how many teams are able to promote
+     * @param name
+     * @param tier
+     * @param promotion
+     */
     public League(String name, int tier, int promotion) {
         this(name, tier, promotion, 0, new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Makes a league with all possible params
+     * @param name
+     * @param tier
+     * @param promotion
+     * @param relegation
+     * @param teams
+     * @param champions
+     */
     public League(String name, int tier, int promotion, int relegation, ArrayList<Team> teams, ArrayList<Team> champions) {
         this.name = name;
         this.tier = tier;
@@ -94,7 +114,10 @@ public class League {
         resultsPanel.removeAll();
     }
 
-
+    /**
+     * Makes a league table
+     * @return league table
+     */
     public DefaultTableModel constructTable(){
         DefaultTableModel table = new DefaultTableModel();
         List<Team> teams = new ArrayList<>(getTeams());
@@ -133,6 +156,9 @@ public class League {
         return table;
     }
 
+    /**
+     * Makes a match day plan. Teams play in a round-robin system, the method ensures that an odd number of teams can still have a clean match plan.
+     */
     public void makeMatchdayPlan() {
         matchdays.clear();
         if (teams.size() % 2 != 0) {
