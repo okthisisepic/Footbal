@@ -357,8 +357,8 @@ public class MW {
                 try {
                     ((League) o).setName(textName.getText());
                     ((League) o).setPromotion(Integer.parseInt(textPromotion.getText()));
-                    if (((League) o).getTier() != 0)
-                        Inventory.leagues.get(((League) o).getTier() - 1).setRelegation(Integer.parseInt(textPromotion.getText()));
+                    if (((League) o).getTier() != 0) Inventory.leagues.get(((League) o).getTier() - 1).setRelegation(Integer.parseInt(textPromotion.getText()));
+                    editWindow.dispose();
                 } catch (Exception e){
                     editPanel.add(new JLabel("Promotion must be a set of numbers!"));
                 }
@@ -385,6 +385,7 @@ public class MW {
                 try {
                 ((Team) o).name = textName.getText();
                 ((Team) o).elo = Float.parseFloat(textElo.getText());
+                editWindow.dispose();
                 } catch (Exception e){
                     editPanel.add(new JLabel("Elo rating must be a set of numbers!"));
                 }
@@ -433,6 +434,7 @@ public class MW {
                 if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
                 if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
                 if (positionLabel.getText().equals("GK")) ((Spieler) o).setPosition(POSITION.GK);
+                editWindow.dispose();
                 } catch (Exception e){
                     editPanel.add(new JLabel("Rating of a player must be a set of numbers!"));
                 }
