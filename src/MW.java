@@ -26,6 +26,7 @@ public class MW {
         JLabel startLabel = new JLabel("Football simulator");
         JButton createLeagues = new JButton("Create Leagues");
         JButton viewLeagues = new JButton("View Leagues");
+        JButton lazy = new JButton("im lazy");
 
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -37,6 +38,9 @@ public class MW {
         content.add(createLeagues);
         content.add(Box.createVerticalStrut(10));
         content.add(viewLeagues);
+        content.add(Box.createVerticalStrut(10));
+        content.add(lazy);
+
 
 
         startPanel.add(content);
@@ -53,6 +57,12 @@ public class MW {
         viewLeagues.addActionListener(_ -> {
             runViewWindow();
             startWindow.dispose();
+        });
+        lazy.addActionListener(_ ->{
+            String[] genericnames= new String[] {"Guy1","Dude2","Man3","Human Being4","Homo Sapiens5"};
+            Inventory.createLeague("GenericLeague",0);
+            Inventory.makeTeams(genericnames,500,50);
+            Inventory.tier++;
         });
     }
 
@@ -263,7 +273,12 @@ public class MW {
                 DefaultTableModel constructTable1 = l.constructTable();
                 centerPanel.removeAll();
                 centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable1))));
+            } else {
+                l.getResultsPanel().add(new JLabel("Please start a new Season"));
+                joitstimetostopmate();
             }
+
+
         });
 
         simulateAll.addActionListener(_ -> {
@@ -282,6 +297,8 @@ public class MW {
                 }
                 else break;
             }
+            l.getResultsPanel().add(new JLabel("Please start a new Season"));
+            joitstimetostopmate();
         });
 
         close.addActionListener(_ -> leagueWindow.dispose());
@@ -426,5 +443,13 @@ public class MW {
             });
         }
         editWindow.add(editPanel);
+    }
+    public static void joitstimetostopmate() {
+        JFrame Pleasedont = new JFrame("its time to stop");
+        Pleasedont.setSize(200,100);
+        Pleasedont.add(new JLabel("Please start a new season"));
+        Pleasedont.setVisible(true);
+        Pleasedont.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Pleasedont.setLocationRelativeTo(null);
     }
 }
