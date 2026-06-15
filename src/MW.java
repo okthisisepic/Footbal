@@ -9,11 +9,21 @@ public class MW {
     private JFrame viewWindow;
     private JFrame window;
 
+    /**
+     * loads
+     * @throws InterruptedException
+     */
     public MW() throws InterruptedException {
         System.out.println("B A L L S");
         Thread.sleep(500);
         createStartWindow();
     }
+
+    /**
+     * i dont think i have to add anything here its in the name and yeah
+     * i creates the start window containing the title and buttons for creating viewing and generating a league
+     * thats it
+     */
     public void createStartWindow() {
 
         JFrame startWindow = new JFrame("Football simulator");
@@ -66,6 +76,9 @@ public class MW {
         });
     }
 
+    /**
+     * make a window titled Create leagues
+     */
     public void run() {
         window = new JFrame();
         window.setTitle("Create Leagues");
@@ -76,6 +89,9 @@ public class MW {
         contentbroswer();
     }
 
+    /**
+     * Creates the viewwindow
+     */
     public void runViewWindow(){
         viewWindow = new JFrame();
         viewWindow.setTitle("View Leagues");
@@ -87,6 +103,12 @@ public class MW {
         gaming();
     }
 
+    /**
+     * Creates the task bar which contains important buttons like
+     * Inventory
+     * New Season
+     * and not many more!
+     */
     public void Taskbar() {
         JPanel TASKLEISTE = new JPanel();
         TASKLEISTE.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // hier kannst sagen, wo die elemente beginnen lass es aber LEFT urr clean Flow layout macht so left right arrangen oder top bottom
@@ -128,6 +150,9 @@ public class MW {
         });
     }
 
+    /**
+     * This makes the window where you create your league!
+     */
     public void contentbroswer() {
             JPanel mainPanel = new JPanel(new GridBagLayout());
             JPanel mainContent = new JPanel();
@@ -223,6 +248,9 @@ public class MW {
             });
         }
 
+    /**
+     * this is the main window for the gameplay
+     */
     public void gaming() {
         JPanel gameWindow = new JPanel();
         for (League l : Inventory.leagues){
@@ -235,6 +263,10 @@ public class MW {
         gameWindow.setBackground(Color.GREEN);
     }
 
+    /**
+     * This makes the window where all the playing of the teams happen including the table and math results
+     * @param l League to play wiht
+     */
     public void buildWindowForLeague(League l){
         JFrame leagueWindow = new JFrame();
         leagueWindow.setTitle("View League: " + l.getName());
@@ -305,6 +337,9 @@ public class MW {
     }
 
 
+    /**
+     * this creaes the inventory window where you can view and edit all your players
+     */
     public void inventoryWindow() {
         JFrame invenwindow = new JFrame();
         invenwindow.setSize(700, 700);
@@ -341,6 +376,10 @@ public class MW {
         editList.setBackground(Color.green);
     }
 
+    /**
+     * this is the edit window where you edit your player
+     * @param o o
+     */
     private void inventoryEvent(Object o) {
         JFrame editWindow = new JFrame();
         editWindow.setSize(400, 400);
@@ -444,6 +483,10 @@ public class MW {
         }
         editWindow.add(editPanel);
     }
+
+    /**
+     * this reminds the player to start a new season because the game is over
+     */
     public static void joitstimetostopmate() {
         JFrame Pleasedont = new JFrame("its time to stop");
         Pleasedont.setSize(200,100);
