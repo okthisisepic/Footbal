@@ -9,11 +9,19 @@ public class Match {
     private JPanel matchResultsPanel = new JPanel();
     private ArrayList<String> eventList = new ArrayList<>();
 
+    /**
+     * Constructs Match-Class
+     * @param team1 first Team (home)
+     * @param team2 second Team (away)
+     */
     public Match(Team team1, Team team2){
         this.team1 = team1;
         this.team2 = team2;
     }
 
+    /**
+     * Starts/Prepares a match, players from each team will be sorted by rating, to make it easier to make a starting eleven for each team. Next, a quantity of chances will be computed, to make simulation possible.
+     */
     public void startMatch() {
         matchResultsPanel.setLayout(new BoxLayout(matchResultsPanel,BoxLayout.Y_AXIS));
         team1.getPlayers().sort(Comparator.comparingDouble(Spieler::getRating).reversed());
@@ -44,6 +52,13 @@ public class Match {
         playMatch(startingElevenTeamA,startingElevenTeamB,expectedAttacksA, expectedAttacksB);
     }
 
+    /**
+     * Plays the match. After calculating all possible chances, points, goals and so on, is getting updated by their respective team, which then their power-rating (ELO) will be influenced. 
+     * @param startPlayersA 11 starting players from first team
+     * @param startPlayersB 11 starting players from second team
+     * @param expectedAttacksA All possible chances for the first team
+     * @param expectedAttacksB All possible chances for the second team
+     */
     private void playMatch(ArrayList<Spieler> startPlayersA, ArrayList<Spieler> startPlayersB ,int expectedAttacksA, int expectedAttacksB){
         int goalsA = calculateAttacks(team1,team2,startPlayersA,startPlayersB,expectedAttacksA);
         int goalsB = calculateAttacks(team2,team1,startPlayersB,startPlayersA,expectedAttacksB);
@@ -60,6 +75,11 @@ public class Match {
         updateElo(team1,team2, goalsA, goalsB);
     }
 
+    /**
+     * Gets the strongest 11 players of a team. This method follows a simple 4-3-3 formation system(3 ATT, 3 MID, 4 DEF, 1 GK). The method also checks whether a player is eligible for an upcoming match e.g. injuries, suspensions.
+     * @param t A team
+     * @return strongest 11 players.
+     */
     private ArrayList<Spieler> getStartingEleven(Team t){
         ArrayList<Spieler> returnPlayers = new ArrayList<>();
         int countAttackers = 0;
@@ -82,11 +102,22 @@ public class Match {
         return returnPlayers;
     }
 
+    /**
+     * Computes the combined strength of a starting eleven divided by 11.
+     * @param p List of players
+     * @return Average strength
+     */
     private double getStartingStrength(List<Spieler> p){
         double getStrengthTeam = 0;
         for (Spieler player : p){ getStrengthTeam += player.getRating();}
         return getStrengthTeam / 11;
     }
+
+    /**
+     * Determines the total strength a starting eleven is capable of performing attacks.
+     * @param players List of players of a starting eleven
+     * @return total attack strength
+     */
     private double getAttackStrength(List<Spieler> players){
         double strength = 0;
         for (Spieler p : players) {
@@ -96,6 +127,12 @@ public class Match {
         }
         return strength;
     }
+
+    /**
+     * Determines the total strength a starting eleven is capable of defending incoming attacks.
+     * @param players List of players of a starting eleven
+     * @return total attack strength
+     */
     private double getDefenseStrength(List<Spieler> players) {
         double strength = 0;
         for (Spieler p : players) {
@@ -106,6 +143,15 @@ public class Match {
         return strength;
     }
 
+    /**
+     * Calculate all possible attacks performed by the attacking team. Chances can either be blocked, go off target, go on target but saved by the keeper, or lead to a goal. Each event has its benefits and consequences. Yellow and red cards and even injuries can occur. Players improve and get worse depending on the performance a player made.
+     * @param attackingTeam Team making attacks
+     * @param defendingTeam Team defending attacks
+     * @param startPlayersAttackingSide Starting eleven of attacking team
+     * @param startPlayersDefendingSide Starting eleven of defending team
+     * @param expectedAttacks all attacks the attacking team is expected to make
+     * @return goals for the attacking team
+     */
     private int calculateAttacks(Team attackingTeam,Team defendingTeam,ArrayList<Spieler> startPlayersAttackingSide,ArrayList<Spieler> startPlayersDefendingSide,int expectedAttacks){
         // calculate chances
         double attackStrength = getAttackStrength(startPlayersAttackingSide);
@@ -193,31 +239,11 @@ public class Match {
                 blocked++;
                 //red card
                 if (Math.random() < 0.005){
-                    int random = (int) (Math.random()*startPlayersDefendingSide.size());
-                    Spieler p = startPlayersDefendingSide.get(random);
-                    eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Red Card");
-                    p.setRedCards(p.getRedCards()+1);
-                        p.setDaysSuspended(2);
-                        for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
-                            if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
-                        }
-                        startPlayersDefendingSide = getStartingEleven(defendingTeam);
+                    startPlayersDefendingSide = updateStartingElevenAfterRedCard(defendingTeam, startPlayersDefendingSide, min);
                 }
                 //yellow card
                 else if (Math.random() < 0.09){
-                    int random = (int) (Math.random()*startPlayersDefendingSide.size());
-                    Spieler p = startPlayersDefendingSide.get(random);
-
-                    p.setYellowCards(p.getYellowCards()+1);
-                    if (p.isGotYellowInMatch()){
-                        p.setDaysSuspended(2);
-                        eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Yellow-Red Card");
-                        for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
-                            if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
-                        }
-                        startPlayersDefendingSide = getStartingEleven(defendingTeam);
-                    }
-                    else{ eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Yellow Card"); p.setGotYellowInMatch(true);}
+                    startPlayersDefendingSide = updateStartingElevenAfterYellowCard(defendingTeam, startPlayersDefendingSide, min);
                 }
 
                 // per blocked attack
@@ -243,23 +269,9 @@ public class Match {
             //injury
             if (Math.random() < 0.005){
                 if (Math.random() > 0.15){ //attackingTeam
-                    int random = (int) (Math.random()*startPlayersAttackingSide.size());
-                    Spieler p = startPlayersAttackingSide.get(random);
-                    eventList.add(min+"' "+p.getName()+" ("+attackingTeam.getName()+") Injury");
-                    p.setDaysInjured((int) (Math.random()*9));
-                    for (int j = 0; j < attackingTeam.getPlayers().size(); j++) {
-                        if (p.equals(attackingTeam.getPlayers().get(random))) startPlayersAttackingSide.set(random,p);
-                    }
-                    startPlayersAttackingSide = getStartingEleven(attackingTeam);
+                    startPlayersAttackingSide = injuryAttackingTeam(attackingTeam, startPlayersAttackingSide, min);
                 } else { // defendingTeam
-                    int random = (int) (Math.random()*startPlayersDefendingSide.size());
-                    Spieler p = startPlayersDefendingSide.get(random);
-                    eventList.add(min+"' "+p.getName()+" ("+defendingTeam.getName()+") Injury");
-                    p.setDaysInjured((int) (Math.random()*9));
-                    for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
-                        if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
-                    }
-                    startPlayersDefendingSide = getStartingEleven(defendingTeam);
+                    startPlayersDefendingSide = injuryDefendingTeam(defendingTeam, startPlayersDefendingSide, min);
                 }
             }
         }
@@ -267,34 +279,114 @@ public class Match {
         attackingTeam.goals+=goals;
         defendingTeam.goalsAgainst+=goals;
         // replace players
-        for (Spieler p : startPlayersAttackingSide){
-            for (int i = 0; i < attackingTeam.getPlayers().size(); i++) {
-                if (p.equals(attackingTeam.getPlayers().get(i))){
-                    attackingTeam.getPlayers().set(i,p);
-                }
-            }
-        }
-        for (Spieler p : startPlayersDefendingSide){
-            for (int i = 0; i < defendingTeam.getPlayers().size(); i++) {
-                if (p.equals(defendingTeam.getPlayers().get(i))){
-                    defendingTeam.getPlayers().set(i,p);
-                }
-            }
-        }
+        updatePlayersOfTeam(attackingTeam, startPlayersAttackingSide);
+        updatePlayersOfTeam(defendingTeam, startPlayersDefendingSide);
+
+        //replace goalkeeper
         for (int i = 0; i < startPlayersDefendingSide.size(); i++) {
             if (startPlayersDefendingSide.get(i).getPosition().equals(POSITION.GK)) startPlayersDefendingSide.set(i,goalkeeper);
         }
 
-
-        System.out.println("Goals: "+goals);
-        System.out.println("On Target: "+onTarget);
-        System.out.println("Off Target: "+offTarget);
-        System.out.println("blocked/wasted chances: "+blocked);
-        System.out.println();
-
-
         return goals;
     }
+
+    /**
+     * Updates the starting eleven of the defending team, when an injury had been occurred.
+     * @param defendingTeam .
+     * @param startPlayersDefendingSide starting eleven
+     * @param min The minute when
+     * @return updated list of players
+     */
+    private ArrayList<Spieler> injuryDefendingTeam(Team defendingTeam, ArrayList<Spieler> startPlayersDefendingSide, int min) {
+        int random = (int) (Math.random()* startPlayersDefendingSide.size());
+        Spieler p = startPlayersDefendingSide.get(random);
+        eventList.add(min +"' "+p.getName()+" ("+ defendingTeam.getName()+") Injury");
+        p.setDaysInjured((int) (Math.random()*9));
+        for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
+            if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
+        }
+        startPlayersDefendingSide = getStartingEleven(defendingTeam);
+        return startPlayersDefendingSide;
+    }
+
+    /**
+     * Updates the starting eleven of the attacking team, when an injury had been occurred.
+     * @param attackingTeam .
+     * @param startPlayersAttackingSide starting eleven
+     * @param min The minute when
+     * @return updated list of players
+     */
+    private ArrayList<Spieler> injuryAttackingTeam(Team attackingTeam, ArrayList<Spieler> startPlayersAttackingSide, int min) {
+        int random = (int) (Math.random()* startPlayersAttackingSide.size());
+        Spieler p = startPlayersAttackingSide.get(random);
+        eventList.add(min +"' "+p.getName()+" ("+ attackingTeam.getName()+") Injury");
+        p.setDaysInjured((int) (Math.random()*9));
+        for (int j = 0; j < attackingTeam.getPlayers().size(); j++) {
+            if (p.equals(attackingTeam.getPlayers().get(random))) startPlayersAttackingSide.set(random,p);
+        }
+        startPlayersAttackingSide = getStartingEleven(attackingTeam);
+        return startPlayersAttackingSide;
+    }
+
+    /**
+     * Updates the starting eleven of the defending team, when a yellow card was issued.
+     * @param defendingTeam .
+     * @param startPlayersDefendingSide .
+     * @param min The minute this event occurred
+     * @return updated list of players
+     */
+    private ArrayList<Spieler> updateStartingElevenAfterYellowCard(Team defendingTeam, ArrayList<Spieler> startPlayersDefendingSide, int min) {
+        int random = (int) (Math.random()* startPlayersDefendingSide.size());
+        Spieler p = startPlayersDefendingSide.get(random);
+
+        p.setYellowCards(p.getYellowCards()+1);
+        if (p.isGotYellowInMatch()){
+            p.setDaysSuspended(2);
+            eventList.add(min +"' "+p.getName()+" ("+ defendingTeam.getName()+") Yellow-Red Card");
+            for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
+                if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
+            }
+            startPlayersDefendingSide = getStartingEleven(defendingTeam);
+        }
+        else{ eventList.add(min +"' "+p.getName()+" ("+ defendingTeam.getName()+") Yellow Card"); p.setGotYellowInMatch(true);}
+        return startPlayersDefendingSide;
+    }
+
+    /**
+     * Updates the starting eleven of the defending team, when a red card was issued.
+     * @param defendingTeam .
+     * @param startPlayersDefendingSide .
+     * @param min The minute this event occurred
+     * @return updated list of players
+     */
+    private ArrayList<Spieler> updateStartingElevenAfterRedCard(Team defendingTeam, ArrayList<Spieler> startPlayersDefendingSide, int min) {
+        int random = (int) (Math.random()* startPlayersDefendingSide.size());
+        Spieler p = startPlayersDefendingSide.get(random);
+        eventList.add(min +"' "+p.getName()+" ("+ defendingTeam.getName()+") Red Card");
+        p.setRedCards(p.getRedCards()+1);
+        p.setDaysSuspended(2);
+        for (int j = 0; j < defendingTeam.getPlayers().size(); j++) {
+            if (p.equals(defendingTeam.getPlayers().get(random))) startPlayersDefendingSide.set(random,p);
+        }
+        startPlayersDefendingSide = getStartingEleven(defendingTeam);
+        return startPlayersDefendingSide;
+    }
+
+    /**
+     * Sets players of a starting team in their team
+     * @param t Team
+     * @param startPlayers starting eleven
+     */
+    private void updatePlayersOfTeam(Team t, ArrayList<Spieler> startPlayers) {
+        for (Spieler p : startPlayers){
+            for (int i = 0; i < t.getPlayers().size(); i++) {
+                if (p.equals(t.getPlayers().get(i))){
+                    t.getPlayers().set(i,p);
+                }
+            }
+        }
+    }
+
 
     private void updateRating(double updateValue,POSITION position,ArrayList<Spieler> playerList) {
         while (true){

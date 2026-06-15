@@ -114,10 +114,6 @@ public class Team {
         return points;
     }
 
-    public int getChampionships() {
-        return championships;
-    }
-
     public float getElo() {
         return elo;
     }

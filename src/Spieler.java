@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 enum POSITION{ATT, MID, DEF, GK}
-enum STATUS{}
 
 public class Spieler {
     private String name = "";
