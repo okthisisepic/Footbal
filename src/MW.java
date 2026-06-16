@@ -484,7 +484,7 @@ public class MW {
             editButton.addActionListener(_ -> {
                 try {
                     ((Spieler) o).setName(textName.getText());
-                    ((Spieler) o).setRating(Integer.parseInt(textRating.getText()));
+                    ((Spieler) o).setRating(Double.parseDouble(textRating.getText()));
                     if (positionLabel.getText().equals("ATT")) ((Spieler) o).setPosition(POSITION.ATT);
                     if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
                     if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
