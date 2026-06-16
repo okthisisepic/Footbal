@@ -410,10 +410,10 @@ public class MW {
             editPanel.add(editButton);
             editButton.addActionListener(_ -> {
                 try{
-
                 ((League) o).setName(textName.getText());
                 ((League) o).setPromotion(Integer.parseInt(textPromotion.getText()));
                 if(((League) o).getTier()!=0)Inventory.leagues.get(((League) o).getTier()-1).setRelegation(Integer.parseInt(textPromotion.getText()));
+                editWindow.dispose();
             } catch (Exception e){
                 editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
             }
@@ -440,6 +440,7 @@ public class MW {
                 try{
                 ((Team) o).name = textName.getText();
                 ((Team) o).elo = Float.parseFloat(textElo.getText());
+                editWindow.dispose();
             } catch (Exception e){
                 editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
             }
@@ -488,6 +489,7 @@ public class MW {
                     if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
                     if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
                     if (positionLabel.getText().equals("GK")) ((Spieler) o).setPosition(POSITION.GK);
+                    editWindow.dispose();
                 } catch (Exception e){
                     editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
                 }
