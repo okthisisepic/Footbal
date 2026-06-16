@@ -302,10 +302,10 @@ public class MW {
                     l.getResultsPanel().add(m.getMatchResultsPanel());
                     l.getResultsPanel().add(Box.createVerticalStrut(15));
                 }
+                table.setModel(l.constructTable());
+                l.getResultsPanel().revalidate();
+                l.getResultsPanel().repaint();
                 l.setCountMatchday(l.getCountMatchday() + 1);
-                DefaultTableModel constructTable1 = l.constructTable();
-                centerPanel.removeAll();
-                centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable1))));
             } else {
                 l.getResultsPanel().add(new JLabel("Please start a new Season"));
                 joitstimetostopmate();
@@ -321,9 +321,9 @@ public class MW {
                         l.getResultsPanel().add(m.getMatchResultsPanel());
                         l.getResultsPanel().add(Box.createVerticalStrut(15));
                     }
-                    DefaultTableModel constructTable2 = l.constructTable();
-                    centerPanel.removeAll();
-                    centerPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, l.getResultsPanel(), table.add(new JTable(constructTable2))));
+                    table.setModel(l.constructTable());
+                    l.getResultsPanel().revalidate();
+                    l.getResultsPanel().repaint();
                     l.setCountMatchday(l.getCountMatchday() + 1);
                 }
                 else break;
@@ -409,9 +409,14 @@ public class MW {
             JButton editButton = new JButton("Apply Edit");
             editPanel.add(editButton);
             editButton.addActionListener(_ -> {
+                try{
+
                 ((League) o).setName(textName.getText());
                 ((League) o).setPromotion(Integer.parseInt(textPromotion.getText()));
                 if(((League) o).getTier()!=0)Inventory.leagues.get(((League) o).getTier()-1).setRelegation(Integer.parseInt(textPromotion.getText()));
+            } catch (Exception e){
+                editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
+            }
             });
         }
         if (o instanceof Team) {
@@ -432,8 +437,12 @@ public class MW {
             JButton editButton = new JButton("Apply Edit");
             editPanel.add(editButton);
             editButton.addActionListener(_ -> {
+                try{
                 ((Team) o).name = textName.getText();
                 ((Team) o).elo = Float.parseFloat(textElo.getText());
+            } catch (Exception e){
+                editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
+            }
             });
         }
         if (o instanceof Spieler) {
@@ -472,12 +481,16 @@ public class MW {
             JButton editButton = new JButton("Apply Edit");
             editPanel.add(editButton);
             editButton.addActionListener(_ -> {
-                ((Spieler) o).setName(textName.getText());
-                ((Spieler) o).setRating(Integer.parseInt(textRating.getText()));
-                if (positionLabel.getText().equals("ATT")) ((Spieler) o).setPosition(POSITION.ATT);
-                if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
-                if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
-                if (positionLabel.getText().equals("GK")) ((Spieler) o).setPosition(POSITION.GK);
+                try {
+                    ((Spieler) o).setName(textName.getText());
+                    ((Spieler) o).setRating(Integer.parseInt(textRating.getText()));
+                    if (positionLabel.getText().equals("ATT")) ((Spieler) o).setPosition(POSITION.ATT);
+                    if (positionLabel.getText().equals("MID")) ((Spieler) o).setPosition(POSITION.MID);
+                    if (positionLabel.getText().equals("DEF")) ((Spieler) o).setPosition(POSITION.DEF);
+                    if (positionLabel.getText().equals("GK")) ((Spieler) o).setPosition(POSITION.GK);
+                } catch (Exception e){
+                    editPanel.add(new JLabel("Invalid input! Must be a number for ratings, ELOs and promotions!"));
+                }
             });
         }
         editWindow.add(editPanel);
