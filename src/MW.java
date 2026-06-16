@@ -41,6 +41,7 @@ public class MW {
         startLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewLeagues.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lazy.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Elemente hinzufügen
         content.add(startLabel);
