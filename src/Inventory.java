@@ -58,7 +58,7 @@ public class Inventory {
         //relegation
         for (int i = 0; i < leagues.size()-1; i++) {
             for (int j = 0; j < leagues.get(i).getRelegation(); j++) {
-                Team relegate = leagues.get(i).getTeams().get(leagues.get(i).getTeams().size()-2-j); //gets last place - last relegation spot
+                Team relegate = leagues.get(i).getTeams().getLast(); //gets last place - last relegation spot
                 leagues.get(i+1).getTeams().add(relegate);
                 leagues.get(i).getTeams().remove(relegate);
             }
@@ -67,7 +67,7 @@ public class Inventory {
         //promotion
         for (int i = 0; i < leagues.size()-1; i++) {
             for (int j = 0; j < leagues.get(i+1).getPromotion(); j++) {
-                Team promote = leagues.get(i+1).getTeams().get(j); //gets last place - last relegation spot
+                Team promote = leagues.get(i+1).getTeams().getFirst(); //gets first place - league winner
                 leagues.get(i).getTeams().add(promote);
                 leagues.get(i+1).getTeams().remove(promote);
             }
