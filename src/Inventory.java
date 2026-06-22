@@ -58,7 +58,7 @@ public class Inventory {
         //relegation
         for (int i = 0; i < leagues.size()-1; i++) {
             for (int j = 0; j < leagues.get(i).getRelegation(); j++) {
-                Team relegate = leagues.get(i).getTeams().get(leagues.get(i).getTeams().size()-j-2); //gets last place - last relegation spot
+                Team relegate = leagues.get(i).getTeams().get(leagues.get(i).getTeams().size()-2-j); //gets last place - last relegation spot
                 leagues.get(i+1).getTeams().add(relegate);
                 leagues.get(i).getTeams().remove(relegate);
             }

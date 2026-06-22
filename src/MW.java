@@ -226,6 +226,7 @@ public class MW {
                         if (setPromotion.getText().isBlank()) setPromotion.setText("0");
                         if (setElo.getText().isBlank()) setElo.setText("500");
                         if (averageRating.getText().isBlank()) averageRating.setText("50");
+                        if (setPromotion.getText().isBlank()) setPromotion.setText("0");
                         Inventory.createLeague(leagueName.getText(), Integer.parseInt(setPromotion.getText()));
                         Inventory.makeTeams(teamNames, Float.parseFloat(setElo.getText()), Double.parseDouble(averageRating.getText()));
                         Inventory.tier++;
